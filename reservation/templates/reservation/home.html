@@ -1,12 +1,14 @@
 ﻿{% extends 'base.html' %}
 {% load static %}
 {% block script %}
-    <link rel=icon href="{% static 'reservation/titlelogo.png' %}" sizes="16x16" type="image/png">
+
+    <link rel=icon href="{% static 'reservation/tmdlogo.png' %}" sizes="16x16" type="image/png">
     <link rel="stylesheet" href="{% static 'reservation/main.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://kit.fontawesome.com/eab0835984.js" crossorigin="anonymous"></script>
 {% endblock %}
+
 {% block content %}
     <main>
         <section id="chart">
@@ -56,14 +58,14 @@
         </section>
     </main>
     <footer>
-        <img src="{% static 'reservation/footer_logo.png' %}" alt="footer_logo" />
+        <img src="{% static 'reservation/tmdlogo.jpeg' %}" alt="footer_logo" />
         <span class="contact" style="font-size:x-large; color:inherit ;">
                 <a href="https://open.kakao.com/o/srtwxB0d" target="_blank" style="color:white;"><i class="far fa-comment"></i></a>
                 <a href="https://www.tmdlab.com/#/w/ko/home" target="_blank" style="color:white;">티엠디랩</a>
 
         </span>
         <p>티엠디랩 Tel: 02-6216-0080</p>
-        <p>만든사람 <span style="font-size: x-small;"><a target="_blank" style="color:white; text-decoration: none;" href="https://github.com/MCprotein">신윤수</a></span></p>
+        <p>만든사람 <span style="font-size: medium;"><a target="_blank" style="color:white; text-decoration: none;" href="https://github.com/MCprotein">신윤수</a></span></p>
         <p class="copyright">Copyright(c) SYS. All rights reserved.</p>
     </footer>
     <script src="{% static 'reservation/main.js' %}"></script>
@@ -94,7 +96,7 @@
                 "type":"doughnut",
                 "data":{
                     labels: [
-                        '1A',
+                        '후드',
                     ],
                     "datasets":[
                         {   
@@ -110,12 +112,12 @@
                 "type":"doughnut",
                 "data":{
                     labels: [
-                        '1B',
+                        '칠러',
                     ],
                     "datasets":[
                         {
-                            "data":[pro_1B, 12],
-                            "backgroundColor":["rgba(255, 99, 132)","rgba(79, 81, 81, .3)"],
+                            "data":[pro_3A, 12],
+                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         }
                     ]
@@ -126,7 +128,71 @@
                 "type":"doughnut",
                 "data":{
                     labels: [
-                        '3A',
+                        '핫프레스',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_1B, 12],
+                            "backgroundColor":["rgba(255, 99, 132)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_4"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        'DSC',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_3A, 12],
+                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_5"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        'GPC',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_3A, 12],
+                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_6"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        'UTM',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_3A, 12],
+                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_7"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        '가교기',
                     ],
                     "datasets":[
                         {

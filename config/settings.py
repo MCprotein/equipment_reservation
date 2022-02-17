@@ -138,8 +138,13 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#static 파일에 접근하기 위한 URL을 작성하는 곳
+STATIC_URL = 'static/'
+#static 파일들이 어디에 있는지를 쓰는곳
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+#static 파일들이 어디로 모일 것인지를 쓰는 곳
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
