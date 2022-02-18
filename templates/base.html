@@ -22,9 +22,9 @@
                 <a href="javascript:void(0)" class="navCloseBtn" onclick="closeNav()">&times;</a>
                 {% if user.is_authenticated %}
                     <a href="#"><li class="navFirst">{{user.profile.realname}}<br>{{user.username}} / {{user.profile.department}}</li></a>
-                    <a href="{% url 'myreservation' %}"><li>예약현황</li></a>
+                    <a href="#"><li>예약현황</li></a>
                     <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}"><li>로그아웃</li></a>
-                    <form id="logout" method="POST" action="{% url 'logout' %}">
+                    <form id="logout" method="POST" action="#">
                         {% csrf_token %}
                         <input type="hidden"/>
                     </form>
