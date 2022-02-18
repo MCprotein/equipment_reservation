@@ -2,7 +2,7 @@
 {% load static %}
 {% block script %}
 
-    <link rel=icon href="{% static 'reservation/tmdlogo.png' %}" sizes="16x16" type="image/png">
+    <link rel=icon href="{% static 'reservation/tmdlogo.png' %}" sizes="32x16" type="image/png">
     <link rel="stylesheet" href="{% static 'reservation/main.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -68,8 +68,8 @@
         <p>만든사람 <span style="font-size: medium;"><a target="_blank" style="color:white; text-decoration: none;" href="https://github.com/MCprotein">신윤수</a></span></p>
         <p class="copyright">Copyright(c) SYS. All rights reserved.</p>
     </footer>
-    <script src="{% static 'reservation/main.js' %}"></script>
-    <script>
+<script src="{% static 'reservation/main.js' %}"></script>
+<script>
         $(function() {
             var msg = "{{msg}}";
             if(msg != ""){
@@ -78,19 +78,35 @@
         });
 
         // New 페이지 이동
-        function goNew1A(){
-            location.href="/reservation/new/1A";
+        function goNewHood(){
+            location.href="/reservation/new/Hood";
         }
-        function goNew1B(){
-            location.href="/reservation/new/1B";
+        function goNewChiller(){
+            location.href="/reservation/new/Chiller";
         }
-        function goNew3A(){
-            location.href="/reservation/new/3A";
+        function goNewPress(){
+            location.href="/reservation/new/Press";
+        }
+        function goNewDsc(){
+            location.href="/reservation/new/Dsc";
+        }
+        function goNewGpc(){
+            location.href="/reservation/new/Gpc";
+        }
+        function goNewUtm(){
+            location.href="/reservation/new/Utm";
+        }
+        function goNewCrosslinker(){
+            location.href="/reservation/new/Crosslinker";
         }
         //chart
-        var pro_1A = {{proportion}}[0];
-        var pro_1B = {{proportion}}[1];
-        var pro_3A = {{proportion}}[2];
+        var pro_Hood = {{proportion}}[0];
+        var pro_Chiller = {{proportion}}[1];
+        var pro_Press = {{proportion}}[2];
+        var pro_Dsc = {{proportion}}[3];
+        var pro_Gpc = {{proportion}}[4];
+        var pro_Utm = {{proportion}}[5];
+        var pro_Crosslinker = {{proportion}}[6];
         new Chart(document.getElementById("chart_1"),
             {
                 "type":"doughnut",
@@ -99,8 +115,8 @@
                         '후드',
                     ],
                     "datasets":[
-                        {   
-                            "data":[pro_1A, 12],
+                        {
+                            "data":[pro_Hood, 12],
                             "backgroundColor":["rgba(255, 205, 86)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         },
@@ -116,7 +132,7 @@
                     ],
                     "datasets":[
                         {
-                            "data":[pro_3A, 12],
+                            "data":[pro_Chiller, 12],
                             "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         }
@@ -132,7 +148,7 @@
                     ],
                     "datasets":[
                         {
-                            "data":[pro_1B, 12],
+                            "data":[pro_Press, 12],
                             "backgroundColor":["rgba(255, 99, 132)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         }
@@ -148,8 +164,8 @@
                     ],
                     "datasets":[
                         {
-                            "data":[pro_3A, 12],
-                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "data":[pro_Dsc, 12],
+                            "backgroundColor":["rgba(110, 227, 86)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         }
                     ]
@@ -164,8 +180,8 @@
                     ],
                     "datasets":[
                         {
-                            "data":[pro_3A, 12],
-                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "data":[pro_Gpc, 12],
+                            "backgroundColor":["rgba(119, 86, 227)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         }
                     ]
@@ -180,8 +196,8 @@
                     ],
                     "datasets":[
                         {
-                            "data":[pro_3A, 12],
-                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "data":[pro_Utm, 12],
+                            "backgroundColor":["rgba(240, 5, 64)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         }
                     ]
@@ -196,8 +212,8 @@
                     ],
                     "datasets":[
                         {
-                            "data":[pro_3A, 12],
-                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "data":[pro_Crosslinker, 12],
+                            "backgroundColor":["rgba(70, 71, 69)","rgba(79, 81, 81, .3)"],
                             "borderWidth": 0.3
                         }
                     ]
