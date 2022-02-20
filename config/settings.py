@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'reservation', # reservation app
     'ckeditor', # text ckeditor
     'ckeditor_uploader', # text ckeditor
+    'accounts' # accounts app
 ]
 
 MIDDLEWARE = [
@@ -144,7 +145,15 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
-#static 파일들이 어디로 모일 것인지를 쓰는 곳
+
+# EMAIL 설정
+EMAIL_USE_TLS = True
+EMAIL_PORT = get_secret("EMAIL_PORT")
+EMAIL_HOST = get_secret("EMAIL_HOST")
+EMAIL_HOST_USER = get_secret("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
+SERVER_EMAIL = get_secret("SERVER_EMAIL")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

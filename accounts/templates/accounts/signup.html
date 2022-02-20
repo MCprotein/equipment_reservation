@@ -1,0 +1,36 @@
+{% extends 'accounts_base.html' %}
+{% load static %}
+
+{% block content %}
+        <section id="sign_inputs">
+            <form action="{% url 'signup' %}" method="POST">
+                {% csrf_token %}
+                <select id="major" name="department" style="padding-left: 15px;">
+                    <option value="바이오팀">바이오팀</option>
+                    <option value="고분자팀">고분자팀</option>
+                </select>
+                <input type="text" name="realname" id="worker_name" placeholder="이      름">
+                <input type="text" name="username" id="worker_id" placeholder="아이디">
+
+                <div class="signup">
+                    <input type="password" name="password1" id="password" placeholder="비밀번호">
+                    <input type="password" name="password2" id="confirm_password" placeholder="비밀번호 확인">
+                    <br>
+                    <span style="color:white; font-size:0.88em;">인증 메일을 발송할 구글 아이디를 입력해주세요<br>(구글 지메일로 인증메일이 전송됩니다.)</span>
+                    <br/>
+                    <input type="text" name="email" id="id" placeholder="지메일 ID" style="width:150px; display:table-column-group"><span style="color:white;"> @ </span><input name="email" type="email" value="gmail.com" style="width:110px; display:table-column-group" disabled>
+
+                    <button class="sign_btn">회원가입</button>
+                    <!-- <input type="button" value="회원가입" class="sign_btn"> -->
+                </div>
+            </form>
+            <a style="color:aliceblue; font-size:1em;text-decoration:none;" href="{% url 'login' %}">로그인</a>
+        </section>
+{% endblock %}
+{% block script %}
+<style>
+    body.sign_bg>main>#sign_inputs input{
+        width:290px;
+    }
+</style>
+{% endblock %}

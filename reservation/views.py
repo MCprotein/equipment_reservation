@@ -145,7 +145,7 @@ def delete(request, reservation_id):
         reservation.delete()
     return redirect('/reservation/my')
 
-def myresevation(request):
+def myreservation(request):
     today = date.today() # 오늘 날짜
     now_time = datetime.now() # ex) (2007, 12, 6, 16, 29, 43, 79043)
     now = now_time.hour + (now_time.minute/60) # 현재 시간 # 왜 60으로나누는거지?

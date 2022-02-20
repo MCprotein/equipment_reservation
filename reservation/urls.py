@@ -1,8 +1,6 @@
 from django.urls import path, include
 from .views import *
 
-app_name = 'reservation'
-
 urlpatterns = [
     path('blog/<int:blog_id>', detail, name='detail'),
     path('new/<str:equipment_type>/', new, name='new'),
@@ -12,6 +10,6 @@ urlpatterns = [
     path('edit/<int:reservation_id>', edit, name='edit'),
     path('update/<int:reservation_id>', update, name='update'),
     path('delete/<int:reservation_id', delete, name='delete'),
-    path('my/', myresevation, name='myreservation'),
+    path('my/', myreservation, name='myreservation'),
     path('', home, name='home'),
 ]
