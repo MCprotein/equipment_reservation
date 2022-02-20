@@ -537,8 +537,3 @@ footer>p{
 footer .copyright{
     font-size: 11px;
     color: rgba(255, 255, 255, .5);
-}
-footer > img {
-width: 200px !important;
-height: 100px !important;
-}

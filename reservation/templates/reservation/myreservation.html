@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block script %}
+
+    <link rel=icon href="{% static 'reservation/titlelogo.png' %}" sizes="16x16" type="image/png">
+    <link rel="stylesheet" href="{% static 'reservation/main.css'%}">
+
+{% endblock %}
+
+{% block content %}
+    <main>
+        <section id="reserved_mypage">
+            <h3>예약 현황</h3>
+            {% for reservation in reservation_list %}
+            <div class="reserved_card" style="margin-bottom: 5em;">
+                <table>
+                    <tr>
+                        <th>장비 정보</th>
+                        <td>{{reservation.equipment_type}}</td>
+                    </tr>
+                    <tr>
+                        <th>예약 날짜</th>
+                        <td>{{reservation.equipment_date | date:'Y-m-d' }} {{reservation.equipment_date | date:"D" }}</td>
+                    </tr>
+                    <tr>
+                        <th>예약 시간</th>
+                        <td>{{reservation.equip_start_time}}</td>
+                    </tr>
+                    <tr>
+                        <th>마감 시간</th>
+                        <td>{{reservation.equip_finish_time}}</td>
+                    </tr>
+                </table>
+                <div style="text-align: center; margin-top: 0.5em;"> <button id="equip_return" onclick="confirm_return({{reservation.id}})">예약 취소</button> </div>
+            </div>
+            {% endfor %}
+        </section>
+
+    </main>
+    <script src="{% static 'reservation/main.js' %}"></script>
+    <script type="text/javascript">
+        function confirm_return(id){
+            var result = confirm("예약을 취소하시겠습니까?");
+            if(result){
+                location.href="/reservation/delete/"+id;
+            }
+        }
+    </script>

@@ -123,6 +123,36 @@ def index(request, category_name):
     category = category_name
     return render(request, 'reservation/index.html', {'category':category, 'blogs':blogs})
 
+def edit(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    min_date = datetime.now().strftime("%Y-%m-%d") # 오늘부터
+    max_date = (datetime.now() + timedelta(days=14)).strftime("%Y-%m-%d") # 14일 후까지 가능
+    return render(request, 'reservation/edit.html', {'reservation':reservation, 'min_date':min_date, 'max_date':max_date})
+
+def update(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    reservation.equipment_type = request.GET['equipment_type']
+    reservation.equip_date = request.GET['equipment_date']
+    reservation.equip_start_time = request.GET['equip_start_time']
+    reservation.equip_finish_time = request.GET['equip_finish_time']
+    reservation.save()
+
+    return redirect('/reservation/'+str(reservation.id)) # 새로운 예약 url 주소로 이동
+
+def delete(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    if reservation.user == request.user.username:
+        reservation.delete()
+    return redirect('/reservation/my')
+
+def myresevation(request):
+    today = date.today() # 오늘 날짜
+    now_time = datetime.now() # ex) (2007, 12, 6, 16, 29, 43, 79043)
+    now = now_time.hour + (now_time.minute/60) # 현재 시간 # 왜 60으로나누는거지?
+    reservations = Reservation.objects.all()
+    # 장비 예약 날짜가 오늘보다 크거나 끝나는시간이 지금보다 나중일때 목록을 불러옴
+    reservation_list = reservations.filter(Q(user=request.user.username, equipment_date__gf=today)|Q(user=request.user.username, equipment_date=today, equip_finish_time=now))
+    return  render(request, 'reservation/myreservation.html', {'reservation_list':reservation_list})
 # ajax
 def check(request):
     equipment_type_vr = request.POST.get('equipment_type', None)

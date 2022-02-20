@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+</head>
+<body>
+	<div style="width:100px;">
+		<canvas id="chart_1" width="7vw" height="7vh"></canvas>
+	</div>
+	<div style="width:100px;">
+		<canvas id="chart_2" width="7vw" height="7vh"></canvas>
+	</div>
+	<div style="width:100px;">
+		<canvas id="chart_3" width="7vw" height="7vh"></canvas>
+	</div>
+    <div style="width:100px;">
+		<canvas id="chart_4" width="7vw" height="7vh"></canvas>
+	</div>
+    <div style="width:100px;">
+		<canvas id="chart_5" width="7vw" height="7vh"></canvas>
+	</div>
+    <div style="width:100px;">
+		<canvas id="chart_6" width="7vw" height="7vh"></canvas>
+	</div>
+    <div style="width:100px;">
+		<canvas id="chart_7" width="7vw" height="7vh"></canvas>
+	</div>
+<script>
+	new Chart(document.getElementById("chart_1"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        '후드',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_Hood, 12],
+                            "backgroundColor":["rgba(255, 205, 86)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        },
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_2"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        '칠러',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_Chiller, 12],
+                            "backgroundColor":["rgba(54, 162, 235)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_3"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        '핫프레스',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_Press, 12],
+                            "backgroundColor":["rgba(255, 99, 132)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_4"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        'DSC',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_Dsc, 12],
+                            "backgroundColor":["rgba(110, 227, 86)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_5"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        'GPC',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_Gpc, 12],
+                            "backgroundColor":["rgba(119, 86, 227)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_6"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        'UTM',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_Utm, 12],
+                            "backgroundColor":["rgba(240, 5, 64)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+        new Chart(document.getElementById("chart_7"),
+            {
+                "type":"doughnut",
+                "data":{
+                    labels: [
+                        '가교기',
+                    ],
+                    "datasets":[
+                        {
+                            "data":[pro_Crosslinker, 12],
+                            "backgroundColor":["rgba(70, 71, 69)","rgba(79, 81, 81, .3)"],
+                            "borderWidth": 0.3
+                        }
+                    ]
+                }
+            });
+	</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block script %}
+
+    <link rel=icon href="{% static 'reservation/titlelogo.png' %}" sizes="16x16" type="image/png">
+    <link rel="stylesheet" href="{% static 'reservation/main.css'%}">
+
+{% endblock %}
+
+{% block content %}
+    <main>
+            <section class="post_container">
+                <h2><a style="color:#000000; text-decoration:none" href="{% url 'index' blog.category %}">{{blog.category}}</a></h2>
+                <div id="notice" class="post">
+                    <div class="post_item">
+                        <div class="post_title">
+                            <h3>{{blog.title}}</h3>
+                            <span>{{blog.created}}</span>
+                        </div>
+                        <div class="post_content">
+                            {{blog.description|safe}}
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'index' blog.category %}"><button class="post_btn">목록</button></a>
+            </section>
+
+        </main>
+        <script src="{% static 'reservation/main.js' %}"></script>
+
+{% endblock %}
+
+{% block style %}
+    <style>
+        img{
+            max-width:  40vh;
+            max-height: 40vh;
+        }
+    </style>
+{% endblock %}
