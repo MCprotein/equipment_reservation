@@ -5,8 +5,8 @@ from .models import *
 # Register your models here.
 
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'equipment_type', 'equipment_date']
-    list_filter = ['user', 'equipment_type', 'equipment_date']
+    list_display = ['id', 'author', 'equipment_type', 'equipment_date']
+    list_filter = ['author', 'equipment_type', 'equipment_date']
 
 
 admin.site.register(Reservation, ReservationAdmin)

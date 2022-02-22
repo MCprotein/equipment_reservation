@@ -24,7 +24,7 @@
                     <a href="{% url 'myreservation' %}"><li class="navFirst">{{user.profile.realname}}<br>{{user.username}} / {{user.profile.department}}</li></a>
                     <a href="{% url 'myreservation' %}"><li>예약현황</li></a>
                     <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}"><li>로그아웃</li></a>
-                    <form id="logout" method="POST" action="#">
+                    <form id="logout" method="POST" action="{% url 'logout' %}">
                         {% csrf_token %}
                         <input type="hidden"/>
                     </form>

@@ -5,7 +5,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
 class Reservation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='user_reservation')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reservation')
     # user = models.CharField(max_length=10)
     equipment_type = models.CharField(max_length=10) # 장비 종류
     equipment_date = models.DateField(max_length=20) # 장비 날짜
@@ -17,10 +17,10 @@ class Reservation(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return self.user
+        return self.Author
 
 class Blog(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='user_blog')
+    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_blog')
     category = models.CharField(max_length=20, default='공지사항') # 게시판 카테고리, 기본값:공지사항
     title = models.CharField(max_length=200) # title
     created = models.DateTimeField(auto_now_add=True)

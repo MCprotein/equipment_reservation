@@ -27,20 +27,20 @@ def signup(request):
 
             # 이메일 중복일 경우 실패
             if len(User.objects.filter(email=mail_to)) == 0:
-                user = User.objects.create_user(username=request.POST['username'], email=mail_to, password=request.POST['password1'])
-                user.is_active = False
-                user.save()
+                new_user = User.objects.create_user(username=request.POST['username'], email=mail_to, password=request.POST['password1'])
+                new_user.is_active = False
+                new_user.save()
                 realname = request.POST['realname'] # 이름
                 department = request.POST['department'] # 소속
-                profile = Profile(user=user, realname=realname, department=department)
+                profile = Profile(user=new_user, realname=realname, department=department)
                 profile.save() # 프로필 저장
 
                 current_site = get_current_site(request)
                 message = render_to_string('accounts/activation_email.html', {
-                    'user': user,
+                    'user': new_user,
                     'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user),
+                    'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
+                    'token': account_activation_token.make_token(new_user),
                 })
                 mail_title = "티엠디랩 실험실 장비 예약 시스템 계정 활성화 확인"
                 email = EmailMessage(mail_title, message, to=[mail_to])
