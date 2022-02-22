@@ -6,6 +6,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
 class Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='user_reservation')
+    # user = models.CharField(max_length=10)
     equipment_type = models.CharField(max_length=10) # 장비 종류
     equipment_date = models.DateField(max_length=20) # 장비 날짜
     equip_start_time = models.FloatField() # 시작 시간 0900

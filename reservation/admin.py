@@ -13,8 +13,8 @@ admin.site.register(Reservation, ReservationAdmin)
 
 
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'category', 'title', 'created']
-    list_filter = ['id', 'user', 'category', 'title', 'created']
+    list_display = ['id', 'category', 'title', 'created']
+    list_filter = ['id', 'category', 'title', 'created']
 
 
 admin.site.register(Blog, BlogAdmin)

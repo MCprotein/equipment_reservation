@@ -151,7 +151,8 @@ def myreservation(request):
     now = now_time.hour + (now_time.minute/60) # 현재 시간 # 왜 60으로나누는거지?
     reservations = Reservation.objects.all()
     # 장비 예약 날짜가 오늘보다 크거나 끝나는시간이 지금보다 나중일때 목록을 불러옴
-    reservation_list = reservations.filter(Q(user=request.user.username, equipment_date__gf=today)|Q(user=request.user.username, equipment_date=today, equip_finish_time=now))
+    # reservation_list = reservations.filter(Q(user=request.user.username, equipment_date__gf=today)|Q(user=request.user.username, equipment_date=today, equip_finish_time__gte=now))
+    reservation_list = Reservation.objects.filter(Q(user=request.user.username, equipment_date__gt=today)|Q(user=request.user.username, equipment_date=today, equip_finish_time__gte=now))
     return  render(request, 'reservation/myreservation.html', {'reservation_list':reservation_list})
 # ajax
 def check(request):

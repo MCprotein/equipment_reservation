@@ -51,6 +51,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites', # 소셜로그인
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -58,7 +59,15 @@ INSTALLED_APPS = [
     'reservation', # reservation app
     'ckeditor', # text ckeditor
     'ckeditor_uploader', # text ckeditor
-    'accounts' # accounts app
+    'accounts', # accounts app
+
+    # allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # provider 구글
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -166,3 +175,13 @@ CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of 'allauth'
+    'django.contrib.auth.backends.ModelBackend',
+    # 'allauth' specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+

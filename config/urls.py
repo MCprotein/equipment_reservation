@@ -17,14 +17,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from reservation.views import home
+from reservation.views import base_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('reservation/', include('reservation.urls')),
     path('accounts/', include('accounts.urls')),
-    path('', home, name='home')
+    path('accounts/', include('allauth.urls')),
+    path('', base_views.home, name='home'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -26,7 +26,7 @@ def signup(request):
             mail_to = request.POST['email'] + "@gmail.com" # 지메일 # 추후 구글웹로그인으로 변경
 
             # 이메일 중복일 경우 실패
-            if User.objects.filter(email=mail_to) is not None:
+            if len(User.objects.filter(email=mail_to)) == 0:
                 user = User.objects.create_user(username=request.POST['username'], email=mail_to, password=request.POST['password1'])
                 user.is_active = False
                 user.save()
@@ -38,9 +38,9 @@ def signup(request):
                 current_site = get_current_site(request)
                 message = render_to_string('accounts/activation_email.html', {
                     'user': user,
-                    'domain': current_site,
+                    'domain': current_site.domain,
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user)
+                    'token': account_activation_token.make_token(user),
                 })
                 mail_title = "티엠디랩 실험실 장비 예약 시스템 계정 활성화 확인"
                 email = EmailMessage(mail_title, message, to=[mail_to])
