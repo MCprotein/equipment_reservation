@@ -8,17 +8,18 @@ from django.db.models import Q
 # Create
 @login_required
 def create(request):
-    reserve_date = datetime.strptime(request.GET['equipment_date'], "%Y-%m%d ").date() # strptime: 문자열을 datetime으로 변환
+
+    reserve_date = datetime.strptime(request.GET.get('equipment_date'), "%Y-%m-%d ").date() # strptime: 문자열을 datetime으로 변환
 
     # 만들기
     reservation = Reservation() # 객체 만들기
-    reservation.user = request.GET['author'] # 내용 채우기
-    reservation.equipment_type = request.GET['equipment_type'] # 내용 채우기
-    reservation.equip_date = reserve_date # 내용 채우기
+    reservation.author = request.user # 내용 채우기
+    reservation.equipment_type = request.GET.get('equipment_type') # 내용 채우기
+    reservation.equipment_date = reserve_date # 내용 채우기
 
     # 시간 구하기
-    reservation.equip_start_time = request.GET['equip_start_time']
-    reservation.equip_finish_time = request.GET['equip_finish_time']
+    reservation.equip_start_time = request.GET.get('equip_start_time')
+    reservation.equip_finish_time = request.GET.get('equip_finish_time')
     reservation.created = timezone.datetime.now() # 내용 채우기
     reservation.save() # 객체 저장하기
 
