@@ -38,7 +38,7 @@ def new(request, equipment_type):
         day = start_day + timedelta(days=i)
         reservations_day = reservations.filter( # 하루치 예약 목록
             equipment_type=equipment_type,
-            author=request.user.username,
+            author__username=request.user.username,
             equipment_date=day
         ).order_by('equip_start_time')
         temp_list = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
