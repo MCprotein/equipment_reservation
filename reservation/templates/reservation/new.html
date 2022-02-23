@@ -300,7 +300,7 @@
             var start_time = $('#equip_start_time').val(); // 시작시간 가져오기
             var hour = Math.floor(start_time); // 시 가져오기
             var min = start_time-hour // 분 가져오기
-            for(var cnt = 0; cnt<4; cnt++){
+            for(var cnt = 0; cnt<19; cnt++){
                 // 시간 늘리기
                 min = min+0.5;
                 if(min == 1){
@@ -309,7 +309,7 @@
                 }
 
                 // 탈출 조건
-                if(hour+min == 21.5){
+                if(hour+min == 18.5){
                     break;
                 }
 
@@ -349,7 +349,7 @@
                 document.getElementById(day_name[i]).innerHTML= mm.toString() + "/"+ dd.toString() + kor_day_name[i];
 
                 for(var j=0; j<day_list[i].length; j++){
-                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML="예약";
+                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML="test";
                     if( $('#equipment_type').val()=='Hood')
                         document.getElementById( day_name[i]+'_'+day_list[i][j] ).style.backgroundColor='rgba(255, 205, 86)';
                     else if( $('#equipment_type').val()=='Chiller')
