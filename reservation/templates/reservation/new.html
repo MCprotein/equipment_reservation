@@ -286,11 +286,14 @@
         }
         function goNewDsc(){
             location.href="/reservation/new/Dsc";
-        }function goNewGpc(){
+        }
+        function goNewGpc(){
             location.href="/reservation/new/Gpc";
-        }function goNewUtm(){
+        }
+        function goNewUtm(){
             location.href="/reservation/new/Utm";
-        }function goNewCrosslinker(){
+        }
+        function goNewCrosslinker(){
             location.href="/reservation/new/Crosslinker";
         }
 
@@ -309,7 +312,7 @@
                 }
 
                 // 탈출 조건
-                if(hour+min == 17.0){
+                if(hour+min == 18.5){
                     break;
                 }
 
@@ -373,15 +376,15 @@
     <!-- Ajax 예약 점검 -->
     <script type="text/javascript">
         $("#equip_check").click(function(){
-            var equip_type = $('#equip_type').val();
-            var equip_date = $('#datepicker').val();
+            var equipment_type = $('#equipment_type').val();
+            var equipment_date = $('#datepicker').val();
             var equip_start_time = $('#equip_start_time').val();
             var equip_finish_time= $('#equip_finish_time').val();
 
             $.ajax({ // ajax로 서버와 통신하겠다.
                 type: "POST", // 데이터를 전송하는 방법을 지정
                 url: "{% url 'check' %}", // 통신할 url을 지정
-                data: {'equip_type': equip_type, 'equip_date': equip_date, 'equip_start_time':equip_start_time, 'equip_finish_time':equip_finish_time, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, // 서버로 데이터 전송시 옵션
+                data: {'equipment_type': equipment_type, 'equipment_date': equipment_date, 'equip_start_time':equip_start_time, 'equip_finish_time':equip_finish_time, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, // 서버로 데이터 전송시 옵션
                 dataType: "json", // 서버측에서 전송한 데이터를 어떤 형식의 데이터로서 해석할 것인가를 지정, 없으면 알아서 판단
                 // 서버측에서 전송한 Response 데이터 형식 (json)
                 // {'likes_count': post.like_count, 'message': message }

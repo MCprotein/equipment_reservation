@@ -62,7 +62,7 @@ def edit(request, reservation_id):
 def update(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
     reservation.equipment_type = request.GET.get('equipment_type')
-    reservation.equip_date = request.GET.get('equipment_date')
+    reservation.equipment_date = request.GET.get('equipment_date')
     reservation.equip_start_time = request.GET.get('equip_start_time')
     reservation.equip_finish_time = request.GET.get('equip_finish_time')
     reservation.save()
