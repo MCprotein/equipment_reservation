@@ -13,7 +13,7 @@ def home(request):
     equip_Crosslinker = Reservation.objects.filter(equipment_date = today, equipment_type ='Crosslinker')
     proportion = [0,0,0,0,0,0,0]
     for r in equip_Hood:
-        proportion[0] += (r.eqiup_finish_time - r.equip_start_time)
+        proportion[0] += (r.equip_finish_time - r.equip_start_time)
     for r in equip_Chiller:
         proportion[1] += (r.equip_finish_time - r.equip_start_time)
     for r in equip_Press:
