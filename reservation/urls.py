@@ -9,7 +9,7 @@ urlpatterns = [
     path('create/', my_views.create, name='create'),
     path('edit/<int:reservation_id>', edit_views.edit, name='edit'),
     path('update/<int:reservation_id>', edit_views.update, name='update'),
-    path('delete/<int:reservation_id', edit_views.delete, name='delete'),
+    path('delete/<int:reservation_id>', edit_views.delete, name='delete'),
     path('my/', my_views.myreservation, name='myreservation'),
     path('', base_views.home, name='home'),
 ]

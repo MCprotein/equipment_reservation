@@ -61,16 +61,16 @@ def edit(request, reservation_id):
 
 def update(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
-    reservation.equipment_type = request.GET['equipment_type']
-    reservation.equip_date = request.GET['equipment_date']
-    reservation.equip_start_time = request.GET['equip_start_time']
-    reservation.equip_finish_time = request.GET['equip_finish_time']
+    reservation.equipment_type = request.GET.get('equipment_type')
+    reservation.equip_date = request.GET.get('equipment_date')
+    reservation.equip_start_time = request.GET.get('equip_start_time')
+    reservation.equip_finish_time = request.GET.get('equip_finish_time')
     reservation.save()
 
     return redirect('/reservation/'+str(reservation.id)) # 새로운 예약 url 주소로 이동
 
 def delete(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
-    if reservation.user == request.user.username:
+    if reservation.author == request.user:
         reservation.delete()
     return redirect('/reservation/my')

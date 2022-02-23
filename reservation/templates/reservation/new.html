@@ -276,22 +276,22 @@
     <script type="text/javascript">
         // New 페이지 이동
         function goNewHood(){
-            location.href="/reservation/new/hood";
+            location.href="/reservation/new/Hood";
         }
         function goNewChiller(){
-            location.href="/reservation/new/chiller";
+            location.href="/reservation/new/Chiller";
         }
         function goNewPress(){
-            location.href="/reservation/new/press";
+            location.href="/reservation/new/Press";
         }
         function goNewDsc(){
-            location.href="/reservation/new/dsc";
+            location.href="/reservation/new/Dsc";
         }function goNewGpc(){
-            location.href="/reservation/new/gpc";
+            location.href="/reservation/new/Gpc";
         }function goNewUtm(){
-            location.href="/reservation/new/utm";
+            location.href="/reservation/new/Utm";
         }function goNewCrosslinker(){
-            location.href="/reservation/new/crosslinker";
+            location.href="/reservation/new/Crosslinker";
         }
 
         // finish 시간 세팅
@@ -350,12 +350,20 @@
 
                 for(var j=0; j<day_list[i].length; j++){
                     document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML="예약";
-                    if( $('#equip_type').val()=='1A')
+                    if( $('#equipment_type').val()=='Hood')
                         document.getElementById( day_name[i]+'_'+day_list[i][j] ).style.backgroundColor='rgba(255, 205, 86)';
-                    else if( $('#equip_type').val()=='1B')
-                        document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(255, 99, 132)';
-                    else
+                    else if( $('#equipment_type').val()=='Chiller')
                         document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(54, 162, 235)';
+                    else if( $('#equipment_type').val()=='Press')
+                        document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(255, 99, 132)';
+                    else if( $('#equipment_type').val()=='Dsc')
+                        document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(110, 227, 86)';
+                    else if( $('#equipment_type').val()=='Gpc')
+                        document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(119, 86, 227)';
+                    else if( $('#equipment_type').val()=='Utm')
+                        document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(240, 5, 64)';
+                    else if( $('#equipment_type').val()=='Crosslinker')
+                        document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(70, 71, 69)';
                 }
             }
 
