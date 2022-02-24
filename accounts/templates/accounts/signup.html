@@ -3,7 +3,7 @@
 
 {% block content %}
         <section id="sign_inputs">
-            <form action="{% url 'signup' %}" method="POST">
+            <form action="{% url 'accounts:signup' %}" method="POST">
                 {% csrf_token %}
                 <select id="major" name="department" style="padding-left: 15px;">
                     <option value="바이오팀">바이오팀</option>
@@ -24,7 +24,7 @@
                     <!-- <input type="button" value="회원가입" class="sign_btn"> -->
                 </div>
             </form>
-            <a style="color:aliceblue; font-size:1em;text-decoration:none;" href="{% url 'login' %}">로그인</a>
+            <a style="color:aliceblue; font-size:1em;text-decoration:none;" href="{% url 'accounts:login' %}">로그인</a>
         </section>
 {% endblock %}
 {% block script %}

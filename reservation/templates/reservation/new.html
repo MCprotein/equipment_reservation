@@ -23,7 +23,7 @@
                 <button id="Crosslinker" onclick="goNewCrosslinker()">가교기</button>
             </div>
             <div class="selects">
-                <form action="{% url 'create' %}" id="new_form">
+                <form action="{% url 'reservation:create' %}" id="new_form">
                     <input name="user" value="{{user.username}}" type="hidden"/>
                     <p>장비:
                         <input readonly name="equipment_type" value="{{equipment_type}}" type="text" id="equipment_type" style="width:100px;height:30px;">
@@ -380,7 +380,7 @@
 
             $.ajax({ // ajax로 서버와 통신하겠다.
                 type: "POST", // 데이터를 전송하는 방법을 지정
-                url: "{% url 'check' %}", // 통신할 url을 지정
+                url: "{% url 'reservation:check' %}", // 통신할 url을 지정
                 data: {'equipment_type': equipment_type, 'equipment_date': equipment_date, 'equip_start_time':equip_start_time, 'equip_finish_time':equip_finish_time, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, // 서버로 데이터 전송시 옵션
                 dataType: "json", // 서버측에서 전송한 데이터를 어떤 형식의 데이터로서 해석할 것인가를 지정, 없으면 알아서 판단
                 // 서버측에서 전송한 Response 데이터 형식 (json)

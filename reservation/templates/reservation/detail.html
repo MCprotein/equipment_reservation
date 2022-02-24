@@ -11,7 +11,7 @@
 {% block content %}
     <main>
             <section class="post_container">
-                <h2><a style="color:#000000; text-decoration:none" href="{% url 'index' blog.category %}">{{blog.category}}</a></h2>
+                <h2><a style="color:#000000; text-decoration:none" href="{% url 'reservation:index' blog.category %}">{{blog.category}}</a></h2>
                 <div id="notice" class="post">
                     <div class="post_item">
                         <div class="post_title">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{% url 'index' blog.category %}"><button class="post_btn">목록</button></a>
+                <a href="{% url 'reservation:index' blog.category %}"><button class="post_btn">목록</button></a>
             </section>
 
         </main>
