@@ -1,6 +1,8 @@
 from django.urls import path, include
 from .views import base_views, blog_views, edit_views, ajax_views, my_views
 
+app_name = 'reservation'
+
 urlpatterns = [
     path('blog/<int:blog_id>', blog_views.detail, name='detail'),
     path('new/<str:equipment_type>/', edit_views.new, name='new'),

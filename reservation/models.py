@@ -22,10 +22,10 @@ class Reservation(models.Model):
 class Blog(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_blog')
     category = models.CharField(max_length=20, default='공지사항') # 게시판 카테고리, 기본값:공지사항
-    title = models.CharField(max_length=200) # title
+    title = models.CharField(max_length=200) # 제목
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    description = RichTextUploadingField(blank=True, null=True) # ckeditor
+    description = RichTextUploadingField(blank=True, null=True) # ckeditor # 내용
 
     class Meta:
         ordering = ['-created', '-updated']

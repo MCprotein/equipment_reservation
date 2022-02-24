@@ -46,6 +46,7 @@ def new(request, equipment_type):
             temp_list.extend(myrange(res.equip_start_time, res.equip_finish_time, 0.5))
         day_list.append(temp_list)
     return render(request, 'reservation/new.html', {
+                                                'author_username': request.user.username,
                                                 'equipment_type': equipment_type,
                                                 'date_diff':date_diff,
                                                 'weekday_mark':weekday_mark,

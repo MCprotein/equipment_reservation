@@ -122,8 +122,6 @@
                     <td id="Thur_11.5"></td>
                     <td id="Fri_11.5"></td>
                 </tr>
-                <tr></tr>
-                <tr></tr>
                 <tr>
                     <td>12:00</td>
                     <td id="Mon_12"></td>
@@ -172,8 +170,6 @@
                     <td id="Thur_14.5"></td>
                     <td id="Fri_14.5"></td>
                 </tr>
-                <tr></tr>
-                <tr></tr>
                 <tr>
                     <td>15:00</td>
                     <td id="Mon_15"></td>
@@ -222,8 +218,6 @@
                     <td id="Thur_17.5"></td>
                     <td id="Fri_17.5"></td>
                 </tr>
-                <tr></tr>
-                <tr></tr>
                 <tr>
                     <td>18:00</td>
                     <td id="Mon_18"></td>
@@ -339,11 +333,14 @@
             var day_list = {{day_list}};
             var day_name = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri'];
             var kor_day_name = [' 월', ' 화', ' 수', ' 목', ' 금'];
+            var author_username = '{{author_username|safe}}';
             // 시작 날짜 세팅
             var day = new Date();
             day.setDate(day.getDate()+{{start_day_diff}}-1);
 
             // 예약 세팅
+
+
             for(var i =0; i<5;i++){
                 // 날짜 세팅
                 day.setDate(day.getDate()+1);
@@ -352,7 +349,7 @@
                 document.getElementById(day_name[i]).innerHTML= mm.toString() + "/"+ dd.toString() + kor_day_name[i];
 
                 for(var j=0; j<day_list[i].length; j++){
-                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML="test";
+                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML='{{author_username}}';
                     if( $('#equipment_type').val()=='Hood')
                         document.getElementById( day_name[i]+'_'+day_list[i][j] ).style.backgroundColor='rgba(255, 205, 86)';
                     else if( $('#equipment_type').val()=='Chiller')
