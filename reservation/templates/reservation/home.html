@@ -40,18 +40,18 @@
         </section>
         <section id="main_post">
             <div class="main_notice main_post_item">
-                <h4><a href="{% url 'reservation:index' "공지사항" %}">장비 공지사항</a></h4>
+                <h4><a href="{% url 'reservation:blog_index' "공지사항" %}">장비 공지사항</a></h4>
                 <ul>
                     {% for notice in notices %}
-                        <li><a href="{% url 'reservation:detail' notice.id %}">{{notice}}</a></li>
+                        <li><a href="{% url 'reservation:blog_detail' notice.id %}">{{notice}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="main_board main_post_item">
-                <h4><a href="{% url 'reservation:index' "분실물" %}">장비 분실물</a></h4>
+                <h4><a href="{% url 'reservation:blog_index' "분실물" %}">장비 분실물</a></h4>
                 <ul>
                     {% for lost in losts %}
-                    <li><a href="{% url 'reservation:detail' lost.id %}">{{lost}}</a></li>
+                    <li><a href="{% url 'reservation:blog_detail' lost.id %}">{{lost}}</a></li>
                     {% endfor %}
                 </ul>
             </div>

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block script %}
+
+    <link rel=icon href="{% static 'reservation/tmdlogo.png' %}" sizes="32x16" type="image/png">
+    <link rel="stylesheet" href="{% static 'reservation/main.css'%}">
+    <script src="{% static 'reservation/jquery-3.6.0.min.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+    <main>
+            <section class="post_container">
+                <h2><a style="color:#000000; text-decoration:none" href="{% url 'reservation:blog_index' blog.category %}">{{blog.category}}</a></h2>
+                <div id="notice" class="post">
+                    <div class="post_item">
+                        <div class="post_title">
+                            <h3>{{blog.title}}</h3>
+                            <span>{{blog.created}}</span>
+                        </div>
+                        <div class="post_content">
+                            {{blog.description|safe}}
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'reservation:blog_index' blog.category %}"><button class="post_btn">목록</button></a>
+                <a href="{% url 'reservation:blog_modify' blog.id %}"><button class="post_btn">수정</button></a>
+<!--                <a href="{% url 'reservation:blog_delete' blog.category blog.id %}"><button class="post_btn">삭제1</button></a>-->
+                <a href="{% url 'reservation:blog_delete' blog.category blog.id %}"
+                   data-uri="{% url 'reservation:blog_delete' blog.category blog.id %}"><button class="delete post_btn">삭제</button></a>
+                {% if blog.category == "공지사항" %}
+                <a href="{% url 'reservation:blog_create' "공지사항" %}"><button class="post_btn">글쓰기</button></a>
+                {% elif blog.category == "분실물" %}
+                <a href="{% url 'reservation:blog_create' "분실물" %}"><button class="post_btn">글쓰기</button></a>
+                {% endif %}
+
+            </section>
+
+        </main>
+        <script src="{% static 'reservation/main.js' %}"></script>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+    $(".delete").on('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = $(this).data('uri');
+        }
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block style %}
+    <style>
+        img{
+            max-width:  40vh;
+            max-height: 40vh;
+        }
+    </style>
+{% endblock %}
