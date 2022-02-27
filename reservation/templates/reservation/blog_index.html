@@ -21,8 +21,7 @@
                     {% for blog in blogs %}
                         <div class="post_items">
                             <h3><a href="{% url 'reservation:blog_detail' blog.id %}">{{blog}}</a></h3>
-                            <span>{{blog.created}}</span>
-                            <span>{{blog.updated}}</span>
+                            <span>{{blog.author}} // {{blog.created}}</span>
                         </div>
                     {% endfor %}
                 </div>

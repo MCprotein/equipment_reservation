@@ -43,7 +43,9 @@
                 <h4><a href="{% url 'reservation:blog_index' "공지사항" %}">장비 공지사항</a></h4>
                 <ul>
                     {% for notice in notices %}
-                        <li><a href="{% url 'reservation:blog_detail' notice.id %}">{{notice}}</a></li>
+                    <li>
+                        <a href="{% url 'reservation:blog_detail' notice.id %}">{{notice}}</a>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -51,7 +53,10 @@
                 <h4><a href="{% url 'reservation:blog_index' "분실물" %}">장비 분실물</a></h4>
                 <ul>
                     {% for lost in losts %}
-                    <li><a href="{% url 'reservation:blog_detail' lost.id %}">{{lost}}</a></li>
+                    <li>
+                        <a href="{% url 'reservation:blog_detail' lost.id %}">{{lost}}</a>
+<!--                        <a style="text-align:right" href="{% url 'reservation:blog_detail' lost.id %}"> || 글 작성일: {{lost.created}}</a>-->
+                    </li>
                     {% endfor %}
                 </ul>
             </div>

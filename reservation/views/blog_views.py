@@ -3,10 +3,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from ..models import Blog
 from ..forms import BlogCreateForm
 from django.contrib import messages
+from django.utils import timezone
 
 def blog_detail(request, blog_id):
-    blog_detail = get_object_or_404(Blog, pk=blog_id) # 특정 객체 가져오기
-    return render(request, 'reservation/blog_detail.html', {'blog':blog_detail})
+    blogs = get_object_or_404(Blog, pk=blog_id) # 특정 객체 가져오기
+    return render(request, 'reservation/blog_detail.html', {'blogs':blogs})
 
 def blog_index(request, category_name):
     blogs = Blog.objects.filter(category=category_name).order_by('-created')
@@ -46,7 +47,7 @@ def blog_modify(request, blog_id):
         form = BlogCreateForm(request.POST, instance=blog)
         if form.is_valid():
             blog = form.save(commit=False)
-            # blog.updated = timezone.now() 수정일시 저장, autonow로 대체
+            blog.updated = timezone.now() # 수정일시 저장,
             blog.save()
             return redirect('reservation:blog_detail', blog_id=blog_id)
     else:

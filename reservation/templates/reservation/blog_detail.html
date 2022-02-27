@@ -12,27 +12,28 @@
 {% block content %}
     <main>
             <section class="post_container">
-                <h2><a style="color:#000000; text-decoration:none" href="{% url 'reservation:blog_index' blog.category %}">{{blog.category}}</a></h2>
+                <h2><a style="color:#000000; text-decoration:none" href="{% url 'reservation:blog_index' blogs.category %}">{{blogs.category}}</a></h2>
                 <div id="notice" class="post">
                     <div class="post_item">
                         <div class="post_title">
-                            <h3>{{blog.title}}</h3>
-                            <span>{{blog.created}}</span>
+                            <h3>{{blogs.title}}</h3>
+                            <h4>작성자: {{blogs.author}}</h4>
+                            <span>{{blogs.created}}</span>
                         </div>
                         <div class="post_content">
-                            {{blog.description|safe}}
+                            {{blogs.description|safe}}
                         </div>
                     </div>
                 </div>
 
-                <a href="{% url 'reservation:blog_index' blog.category %}"><button class="post_btn">목록</button></a>
-                <a href="{% url 'reservation:blog_modify' blog.id %}"><button class="post_btn">수정</button></a>
-<!--                <a href="{% url 'reservation:blog_delete' blog.category blog.id %}"><button class="post_btn">삭제1</button></a>-->
-                <a href="{% url 'reservation:blog_delete' blog.category blog.id %}"
-                   data-uri="{% url 'reservation:blog_delete' blog.category blog.id %}"><button class="delete post_btn">삭제</button></a>
-                {% if blog.category == "공지사항" %}
+                <a href="{% url 'reservation:blog_index' blogs.category %}"><button class="post_btn">목록</button></a>
+                <a href="{% url 'reservation:blog_modify' blogs.id %}"><button class="post_btn">수정</button></a>
+<!--                <a href="{% url 'reservation:blog_delete' blogs.category blogs.id %}"><button class="post_btn">삭제1</button></a>-->
+                <a href="{% url 'reservation:blog_delete' blogs.category blogs.id %}"
+                   data-uri="{% url 'reservation:blog_delete' blogs.category blogs.id %}"><button class="delete post_btn">삭제</button></a>
+                {% if blogs.category == "공지사항" %}
                 <a href="{% url 'reservation:blog_create' "공지사항" %}"><button class="post_btn">글쓰기</button></a>
-                {% elif blog.category == "분실물" %}
+                {% elif blogs.category == "분실물" %}
                 <a href="{% url 'reservation:blog_create' "분실물" %}"><button class="post_btn">글쓰기</button></a>
                 {% endif %}
 
@@ -46,6 +47,9 @@ $(document).ready(function(){
     $(".delete").on('click', function() {
         if(confirm("정말로 삭제하시겠습니까?")) {
             location.href = $(this).data('uri');
+        }
+        else {
+            return false;
         }
     });
 });
