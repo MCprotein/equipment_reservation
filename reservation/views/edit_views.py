@@ -18,16 +18,22 @@ def new(request, equipment_type):
     weekday_mark = 0
 
     # 평일
-    if today_day < 5:
-        start_day = today - timedelta(days=today_day) # 시작 월요일
-        start_day_diff = 0 - today_day # 0 - 오늘요일 차이 # 다름
+    # if today_day < 5:
+    #     start_day = today - timedelta(days=today_day) # 시작 월요일
+    #     start_day_diff = 0 - today_day # 0 - 오늘요일 차이 # 다름
 
     # 주말 -> 다음주, 다다음주까지 예약 가능
-    elif today_day >= 5:
-        start_day_diff = 7- today_day
-        weekday_mark = 7- today_day
-        start_day = today + timedelta(weekday_mark)
-    date_diff = 4-today_day # 마지막 날짜 이게뭐지?
+    # elif today_day >= 5:
+    #     start_day_diff = 7- today_day
+    #     weekday_mark = 7- today_day
+    #     start_day = today + timedelta(weekday_mark)
+
+    # 평일과 주말 상관없이 모두 예약 가능
+    start_day = today - timedelta(days=today_day)  # 시작 월요일
+    start_day_diff = 0 - today_day  # 0 - 오늘요일 차이 # 다름
+
+    # date_diff = 4-today_day # 마지막 날짜
+    date_diff = 13-today_day # 마지막 날짜, 그다음주 금요일까지
 
     # 현재 예약 상황 넘겨 주기
     reservations = Reservation.objects.all()

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block script %}
-    <link rel=icon href="{% static 'reservation/tmdlogo.png' %}" sizes="32x16" type="image/png">
+    <link rel=icon href="{% static 'reservation/tmdCiSm.png' %}" sizes="32x16" type="image/png">
     <link rel="stylesheet" href="{% static 'reservation/main.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -44,7 +44,7 @@
                 <ul>
                     {% for notice in notices %}
                     <li>
-                        <a href="{% url 'reservation:blog_detail' notice.id %}">{{notice}}</a>
+                         <a href="{% url 'reservation:blog_detail' notice.id %}">{{notice}}</a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -64,7 +64,7 @@
     </main>
     <footer>
         <div style="width:30; height:30px; float:left; margin:15px;">
-            <img src="{% static 'reservation/tmdlogo.jpeg' %}" alt="footer_logo" />
+            <img src="{% static 'reservation/tmdCiL.png' %}" alt="footer_logo" />
         </div>
         <span class="contact" style="font-size:x-large; color:inherit ;">
                 <a href="https://open.kakao.com/o/srtwxB0d" target="_blank" style="color:white;"><i class="far fa-comment"></i></a>
