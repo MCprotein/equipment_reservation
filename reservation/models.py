@@ -17,7 +17,7 @@ class Reservation(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return self.Author
+        return str(self.author)
 
 class Blog(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_blog')
@@ -31,4 +31,4 @@ class Blog(models.Model):
         ordering = ['-created', '-updated']
 
     def __str__(self):
-        return self.title
+        return str(self.title)

@@ -21,6 +21,7 @@ urlpatterns = [
     # my_views.py
     path('my/', my_views.myreservation, name='myreservation'),
     path('create/', my_views.create, name='create'),
+    path('total/<str:equipment_type>', my_views.total, name='total'),
 
     # ajax_views.py
     path('check/', ajax_views.check, name='check'),

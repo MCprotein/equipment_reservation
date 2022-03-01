@@ -40,7 +40,7 @@ def new(request, equipment_type):
     day_list = []
 
     #  월~금 예약된 장비 목록 보여주기
-    for i in range(0,5):
+    for i in range(0,7):
         day = start_day + timedelta(days=i)
         reservations_day = reservations.filter( # 하루치 예약 목록
             equipment_type=equipment_type,
