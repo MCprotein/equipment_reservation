@@ -14,6 +14,8 @@ urlpatterns = [
 
     # edit_views.py
     path('new/<str:equipment_type>/', edit_views.new, name='new'),
+    path('new/hood/<str:equipment_type>', edit_views.new, name='new_hood'),
+    path('new/chiller/<str:equipment_type>', edit_views.new, name='new_chiller'),
     path('edit/<int:reservation_id>/', edit_views.edit, name='edit'),
     path('update/<int:reservation_id>/', edit_views.update, name='update'),
     path('delete/<int:reservation_id>/', edit_views.delete, name='delete'),
