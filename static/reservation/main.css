@@ -494,7 +494,7 @@ main>#reserve_all_hood td:nth-child(1){
     background: rgba(79, 81, 81, .6);
     color: white;
 }
-main>#reserve_all_hood td:nth-child(11), main>#reserve_hood_all th:nth-child(11){
+main>#reserve_all_hood td:nth-child(13), main>#reserve_hood_all th:nth-child(13){
     border-right: none;
 }
 
@@ -532,7 +532,7 @@ main>#reserve_all_hood_prev td:nth-child(1){
     background: rgba(79, 81, 81, .6);
     color: white;
 }
-main>#reserve_all_hood_prev td:nth-child(11), main>#reserve_all_hood_prev th:nth-child(11){
+main>#reserve_all_hood_prev td:nth-child(13), main>#reserve_all_hood_prev th:nth-child(13){
     border-right: none;
 }
 
@@ -571,7 +571,7 @@ main>#reserve_all_hood_next td:nth-child(1){
     background: rgba(79, 81, 81, .6);
     color: white;
 }
-main>#reserve_all_hood_next td:nth-child(11), main>#reserve_all_hood_next th:nth-child(11){
+main>#reserve_all_hood_next td:nth-child(13), main>#reserve_all_hood_next th:nth-child(13){
     border-right: none;
 }
 

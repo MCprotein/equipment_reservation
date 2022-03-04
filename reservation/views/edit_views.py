@@ -107,10 +107,9 @@ def new(request, equipment_type):
 @login_required
 def new_hood(request, yoil):
 
-    Hood_list=['Hood_1_1', 'Hood_1_2', 'Hood_1_3',
-                    'Hood_2_1', 'Hood_2_2', 'Hood_2_3',
-                    'Hood_3_1', 'Hood_3_2', 'Hood_3_3',
-                    'Hood_4_1']
+    Hood_list=['Hood_1_1', 'Hood_1_2', 'Hood_1_3', 'Hood_1_4',
+                    'Hood_2_1', 'Hood_2_2', 'Hood_2_3', 'Hood_2_4',
+                    'Hood_3_1', 'Hood_3_2', 'Hood_3_3', 'Hood_3_4']
     # 요일 가져오기
     today = datetime.now() # 2021-03-27 01:27:32.470639 시간 있음
     today_day = today.weekday() # 무슨요일인지 파악. 월화수목금토일 0123456
