@@ -727,11 +727,11 @@
     <script type="text/javascript">
         // New 페이지 이동
         function goNewHood(){
-            location.href="/reservation/new/Hood";
+            location.href="/reservation/new/hood/0";
         }
         function goNewChiller_D(){
             location.href="/reservation/new/chiller/Chiller_D";
-        }
+        }일
         function goNewPress(){
             location.href="/reservation/new/Press";
         }
@@ -807,11 +807,7 @@
 
                 for(var j=0; j<day_list[i].length; j++){
                     document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML='{{author_username}}';
-                    if( $('#equipment_type').val()=='Hood')
-                        document.getElementById( day_name[i]+'_'+day_list[i][j] ).style.backgroundColor='rgba(255, 205, 86)';
-                    else if( $('#equipment_type').val()=='Chiller')
-                        document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(54, 162, 235)';
-                    else if( $('#equipment_type').val()=='Press')
+                    if( $('#equipment_type').val()=='Press')
                         document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(255, 99, 132)';
                     else if( $('#equipment_type').val()=='Dsc')
                         document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(110, 227, 86)';
@@ -849,11 +845,7 @@
 
                 for(var j=0; j<day_list_prev[i].length; j++){
                     document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev' ).innerHTML='{{author_username}}';
-                    if( $('#equipment_type').val()=='Hood')
-                        document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(255, 205, 86)';
-                    else if( $('#equipment_type').val()=='Chiller')
-                        document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev').style.backgroundColor='rgba(54, 162, 235)';
-                    else if( $('#equipment_type').val()=='Press')
+                    if( $('#equipment_type').val()=='Press')
                         document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev').style.backgroundColor='rgba(255, 99, 132)';
                     else if( $('#equipment_type').val()=='Dsc')
                         document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev').style.backgroundColor='rgba(110, 227, 86)';
@@ -892,11 +884,7 @@
 
                 for(var j=0; j<day_list_next[i].length; j++){
                     document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next' ).innerHTML='{{author_username}}';
-                    if( $('#equipment_type').val()=='Hood')
-                        document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(255, 205, 86)';
-                    else if( $('#equipment_type').val()=='Chiller')
-                        document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next').style.backgroundColor='rgba(54, 162, 235)';
-                    else if( $('#equipment_type').val()=='Press')
+                    if( $('#equipment_type').val()=='Press')
                         document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next').style.backgroundColor='rgba(255, 99, 132)';
                     else if( $('#equipment_type').val()=='Dsc')
                         document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next').style.backgroundColor='rgba(110, 227, 86)';

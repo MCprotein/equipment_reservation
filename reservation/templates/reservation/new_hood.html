@@ -1,0 +1,1186 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block script %}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+    <link rel=icon href="{% static 'reservation/tmdCiSm.png' %}" sizes="32x16" type="image/png">
+    <link rel="stylesheet" href="{% static 'reservation/main.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+    <div>
+    <main style="height: 125vh;">
+        <section id="reserve">
+            <!-- <h3>예약 하기</h3> -->
+            <div class="buttons">
+                <button id="NewMon" onclick="goNewMon()">월요일</button>
+                <button id="NewTue" onclick="goNewTue()">화요일</button>
+                <button id="NewWed" onclick="goNewWed()">수요일</button>
+                <button id="NewThur" onclick="goNewThur()">목요일</button>
+                <button id="NewFri" onclick="goNewFri()">금요일</button>
+                <button id="NewSat" onclick="goNewSat()">토요일</button>
+                <button id="NewSun" onclick="goNewSun()">일요일</button>
+                <button id="Other" onclick="goNewPress()">다른 장비 예약하기</button>
+            </div>
+            <div class="selects">
+                <form action="{% url 'reservation:create' %}" id="new_form">
+                    <input name="user" value="{{user.username}}" type="hidden"/>
+                    <p>요일:
+                        {% if yoil == 0 %}
+                        <input readonly name="yoil" value="월요일" type="text" id="yoil0" style="width:100px;height:30px;">
+                        {% elif yoil == 1 %}
+                        <input readonly name="yoil" value="화요일" type="text" id="yoil1" style="width:100px;height:30px;">
+                        {% elif yoil == 2 %}
+                        <input readonly name="yoil" value="수요일" type="text" id="yoil2" style="width:100px;height:30px;">
+                        {% elif yoil == 3 %}
+                        <input readonly name="yoil" value="목요일" type="text" id="yoil3" style="width:100px;height:30px;">
+                        {% elif yoil == 4 %}
+                        <input readonly name="yoil" value="금요일" type="text" id="yoil4" style="width:100px;height:30px;">
+                        {% elif yoil == 5 %}
+                        <input readonly name="yoil" value="토요일" type="text" id="yoil5" style="width:100px;height:30px;">
+                        {% elif yoil == 6 %}
+                        <input readonly name="yoil" value="일요일" type="text" id="yoil6" style="width:100px;height:30px;">
+                        {% endif %}
+                    </p>
+                    <p>장비:
+                        <select name="equipment_type" id="equipment_type" style="width:140px;height:30px";>
+                            <option value="Hood_1_1">1번후드 핫플레이트1</option>
+                            <option value="Hood_1_2">1번후드 핫플레이트2</option>
+                            <option value="Hood_1_3">1번후드 핫플레이트3</option>
+                            <option value="Hood_2_1">2번후드 핫플레이트1</option>
+                            <option value="Hood_2_2">2번후드 핫플레이트2</option>
+                            <option value="Hood_2_3">2번후드 핫플레이트3</option>
+                            <option value="Hood_3_1">3번후드 핫플레이트1</option>
+                            <option value="Hood_3_2">3번후드 핫플레이트2</option>
+                            <option value="Hood_3_3">3번후드 핫플레이트3</option>
+                            <option value="Hood_4_1">4번후드 핫플레이트1</option>
+                        </select>
+                    </p>
+                    <p>예약 날짜:
+                        <input name="equipment_date" type="text" id="datepicker" style="width:100px;height:30px;">
+                    </p>
+                    <p>시작 시간:
+                        <select name="equip_start_time" id="equip_start_time" onchange="finishSet()">
+                            <option value="선택">선택</option>
+                            <option value="9">09:00</option>
+                            <option value="9.5">09:30</option>
+                            <option value="10">10:00</option>
+                            <option value="10.5">10:30</option>
+                            <option value="11">11:00</option>
+                            <option value="11.5">11:30</option>
+                            <option value="12">12:00</option>
+                            <option value="12.5">12:30</option>
+                            <option value="13">13:00</option>
+                            <option value="13.5">13:30</option>
+                            <option value="14">14:00</option>
+                            <option value="14.5">14:30</option>
+                            <option value="15">15:00</option>
+                            <option value="15.5">15:30</option>
+                            <option value="16">16:00</option>
+                            <option value="16.5">16:30</option>
+                            <option value="17">17:00</option>
+                            <option value="17.5">17:30</option>
+                            <option value="18">18:00</option>
+                        </select>
+                    </p>
+                    <p>종료 시간:
+                        <select name="equip_finish_time" id="equip_finish_time">
+                        </select>
+                        <button type="button" class="btn_return" id="equip_check">예약</button>
+                    </form>
+                </p>
+            </div>
+        </section>
+        <section id="reserve_all_hood">
+            <h3>예약 현황</h3>
+            <table>
+                <tr>
+                    <th></th>
+                    <th id="Hood_1_1">1-1</th>
+                    <th id="Hood_1_2">1-2</th>
+                    <th id="Hood_1_3">1-3</th>
+                    <th id="Hood_2_1">2-1</th>
+                    <th id="Hood_2_2">2-2</th>
+                    <th id="Hood_2_3">2-3</th>
+                    <th id="Hood_3_1">3-1</th>
+                    <th id="Hood_3_2">3-2</th>
+                    <th id="Hood_3_3">3-3</th>
+                    <th id="Hood_4_1">4-1</th>
+                </tr>
+                <tr>
+                    <td>09:00</td>
+                    <td id="Hood_1_1_9"></td>
+                    <td id="Hood_1_2_9"></td>
+                    <td id="Hood_1_3_9"></td>
+                    <td id="Hood_2_1_9"></td>
+                    <td id="Hood_2_2_9"></td>
+                    <td id="Hood_2_3_9"></td>
+                    <td id="Hood_3_1_9"></td>
+                    <td id="Hood_3_2_9"></td>
+                    <td id="Hood_3_3_9"></td>
+                    <td id="Hood_4_1_9"></td>
+                </tr>
+                <tr>
+                    <td>09:30</td>
+                    <td id="Hood_1_1_9.5"></td>
+                    <td id="Hood_1_2_9.5"></td>
+                    <td id="Hood_1_3_9.5"></td>
+                    <td id="Hood_2_1_9.5"></td>
+                    <td id="Hood_2_2_9.5"></td>
+                    <td id="Hood_2_3_9.5"></td>
+                    <td id="Hood_3_1_9.5"></td>
+                    <td id="Hood_3_2_9.5"></td>
+                    <td id="Hood_3_3_9.5"></td>
+                    <td id="Hood_4_1_9.5"></td>
+                </tr>
+                <tr>
+                    <td>10:00</td>
+                    <td id="Hood_1_1_10"></td>
+                    <td id="Hood_1_2_10"></td>
+                    <td id="Hood_1_3_10"></td>
+                    <td id="Hood_2_1_10"></td>
+                    <td id="Hood_2_2_10"></td>
+                    <td id="Hood_2_3_10"></td>
+                    <td id="Hood_3_1_10"></td>
+                    <td id="Hood_3_2_10"></td>
+                    <td id="Hood_3_3_10"></td>
+                    <td id="Hood_4_1_10"></td>
+                </tr>
+                <tr>
+                    <td>10:30</td>
+                    <td id="Hood_1_1_10.5"></td>
+                    <td id="Hood_1_2_10.5"></td>
+                    <td id="Hood_1_3_10.5"></td>
+                    <td id="Hood_2_1_10.5"></td>
+                    <td id="Hood_2_2_10.5"></td>
+                    <td id="Hood_2_3_10.5"></td>
+                    <td id="Hood_3_1_10.5"></td>
+                    <td id="Hood_3_2_10.5"></td>
+                    <td id="Hood_3_3_10.5"></td>
+                    <td id="Hood_4_1_10.5"></td>
+                </tr>
+                <tr>
+                    <td>11:00</td>
+                    <td id="Hood_1_1_11"></td>
+                    <td id="Hood_1_2_11"></td>
+                    <td id="Hood_1_3_11"></td>
+                    <td id="Hood_2_1_11"></td>
+                    <td id="Hood_2_2_11"></td>
+                    <td id="Hood_2_3_11"></td>
+                    <td id="Hood_3_1_11"></td>
+                    <td id="Hood_3_2_11"></td>
+                    <td id="Hood_3_3_11"></td>
+                    <td id="Hood_4_1_11"></td>
+                </tr>
+                <tr>
+                    <td>11:30</td>
+                    <td id="Hood_1_1_11.5"></td>
+                    <td id="Hood_1_2_11.5"></td>
+                    <td id="Hood_1_3_11.5"></td>
+                    <td id="Hood_2_1_11.5"></td>
+                    <td id="Hood_2_2_11.5"></td>
+                    <td id="Hood_2_3_11.5"></td>
+                    <td id="Hood_3_1_11.5"></td>
+                    <td id="Hood_3_2_11.5"></td>
+                    <td id="Hood_3_3_11.5"></td>
+                    <td id="Hood_4_1_11.5"></td>
+                </tr>
+                <tr>
+                    <td>12:00</td>
+                    <td id="Hood_1_1_12"></td>
+                    <td id="Hood_1_2_12"></td>
+                    <td id="Hood_1_3_12"></td>
+                    <td id="Hood_2_1_12"></td>
+                    <td id="Hood_2_2_12"></td>
+                    <td id="Hood_2_3_12"></td>
+                    <td id="Hood_3_1_12"></td>
+                    <td id="Hood_3_2_12"></td>
+                    <td id="Hood_3_3_12"></td>
+                    <td id="Hood_4_1_12"></td>
+                </tr>
+                <tr>
+                    <td>12:30</td>
+                    <td id="Hood_1_1_12.5"></td>
+                    <td id="Hood_1_2_12.5"></td>
+                    <td id="Hood_1_3_12.5"></td>
+                    <td id="Hood_2_1_12.5"></td>
+                    <td id="Hood_2_2_12.5"></td>
+                    <td id="Hood_2_3_12.5"></td>
+                    <td id="Hood_3_1_12.5"></td>
+                    <td id="Hood_3_2_12.5"></td>
+                    <td id="Hood_3_3_12.5"></td>
+                    <td id="Hood_4_1_12.5"></td>
+                </tr>
+                <tr>
+                    <td>13:00</td>
+                    <td id="Hood_1_1_13"></td>
+                    <td id="Hood_1_2_13"></td>
+                    <td id="Hood_1_3_13"></td>
+                    <td id="Hood_2_1_13"></td>
+                    <td id="Hood_2_2_13"></td>
+                    <td id="Hood_2_3_13"></td>
+                    <td id="Hood_3_1_13"></td>
+                    <td id="Hood_3_2_13"></td>
+                    <td id="Hood_3_3_13"></td>
+                    <td id="Hood_4_1_13"></td>
+                </tr>
+                <tr>
+                    <td>13:30</td>
+                    <td id="Hood_1_1_13.5"></td>
+                    <td id="Hood_1_2_13.5"></td>
+                    <td id="Hood_1_3_13.5"></td>
+                    <td id="Hood_2_1_13.5"></td>
+                    <td id="Hood_2_2_13.5"></td>
+                    <td id="Hood_2_3_13.5"></td>
+                    <td id="Hood_3_1_13.5"></td>
+                    <td id="Hood_3_2_13.5"></td>
+                    <td id="Hood_3_3_13.5"></td>
+                    <td id="Hood_4_1_13.5"></td>
+                </tr>
+                <tr>
+                    <td>14:00</td>
+                    <td id="Hood_1_1_14"></td>
+                    <td id="Hood_1_2_14"></td>
+                    <td id="Hood_1_3_14"></td>
+                    <td id="Hood_2_1_14"></td>
+                    <td id="Hood_2_2_14"></td>
+                    <td id="Hood_2_3_14"></td>
+                    <td id="Hood_3_1_14"></td>
+                    <td id="Hood_3_2_14"></td>
+                    <td id="Hood_3_3_14"></td>
+                    <td id="Hood_4_1_14"></td>
+                </tr>
+                <tr>
+                    <td>14:30</td>
+                    <td id="Hood_1_1_14.5"></td>
+                    <td id="Hood_1_2_14.5"></td>
+                    <td id="Hood_1_3_14.5"></td>
+                    <td id="Hood_2_1_14.5"></td>
+                    <td id="Hood_2_2_14.5"></td>
+                    <td id="Hood_2_3_14.5"></td>
+                    <td id="Hood_3_1_14.5"></td>
+                    <td id="Hood_3_2_14.5"></td>
+                    <td id="Hood_3_3_14.5"></td>
+                    <td id="Hood_4_1_14.5"></td>
+                </tr>
+                <tr>
+                    <td>15:00</td>
+                    <td id="Hood_1_1_15"></td>
+                    <td id="Hood_1_2_15"></td>
+                    <td id="Hood_1_3_15"></td>
+                    <td id="Hood_2_1_15"></td>
+                    <td id="Hood_2_2_15"></td>
+                    <td id="Hood_2_3_15"></td>
+                    <td id="Hood_3_1_15"></td>
+                    <td id="Hood_3_2_15"></td>
+                    <td id="Hood_3_3_15"></td>
+                    <td id="Hood_4_1_15"></td>
+                </tr>
+                <tr>
+                    <td>15:30</td>
+                    <td id="Hood_1_1_15.5"></td>
+                    <td id="Hood_1_2_15.5"></td>
+                    <td id="Hood_1_3_15.5"></td>
+                    <td id="Hood_2_1_15.5"></td>
+                    <td id="Hood_2_2_15.5"></td>
+                    <td id="Hood_2_3_15.5"></td>
+                    <td id="Hood_3_1_15.5"></td>
+                    <td id="Hood_3_2_15.5"></td>
+                    <td id="Hood_3_3_15.5"></td>
+                    <td id="Hood_4_1_15.5"></td>
+                </tr>
+                <tr>
+                    <td>16:00</td>
+                    <td id="Hood_1_1_16"></td>
+                    <td id="Hood_1_2_16"></td>
+                    <td id="Hood_1_3_16"></td>
+                    <td id="Hood_2_1_16"></td>
+                    <td id="Hood_2_2_16"></td>
+                    <td id="Hood_2_3_16"></td>
+                    <td id="Hood_3_1_16"></td>
+                    <td id="Hood_3_2_16"></td>
+                    <td id="Hood_3_3_16"></td>
+                    <td id="Hood_4_1_16"></td>
+                </tr>
+                <tr>
+                    <td>16:30</td>
+                    <td id="Hood_1_1_16.5"></td>
+                    <td id="Hood_1_2_16.5"></td>
+                    <td id="Hood_1_3_16.5"></td>
+                    <td id="Hood_2_1_16.5"></td>
+                    <td id="Hood_2_2_16.5"></td>
+                    <td id="Hood_2_3_16.5"></td>
+                    <td id="Hood_3_1_16.5"></td>
+                    <td id="Hood_3_2_16.5"></td>
+                    <td id="Hood_3_3_16.5"></td>
+                    <td id="Hood_4_1_16.5"></td>
+                </tr>
+                <tr>
+                    <td>17:00</td>
+                    <td id="Hood_1_1_17"></td>
+                    <td id="Hood_1_2_17"></td>
+                    <td id="Hood_1_3_17"></td>
+                    <td id="Hood_2_1_17"></td>
+                    <td id="Hood_2_2_17"></td>
+                    <td id="Hood_2_3_17"></td>
+                    <td id="Hood_3_1_17"></td>
+                    <td id="Hood_3_2_17"></td>
+                    <td id="Hood_3_3_17"></td>
+                    <td id="Hood_4_1_17"></td>
+                </tr>
+                <tr>
+                    <td>17:30</td>
+                    <td id="Hood_1_1_17.5"></td>
+                    <td id="Hood_1_2_17.5"></td>
+                    <td id="Hood_1_3_17.5"></td>
+                    <td id="Hood_2_1_17.5"></td>
+                    <td id="Hood_2_2_17.5"></td>
+                    <td id="Hood_2_3_17.5"></td>
+                    <td id="Hood_3_1_17.5"></td>
+                    <td id="Hood_3_2_17.5"></td>
+                    <td id="Hood_3_3_17.5"></td>
+                    <td id="Hood_4_1_17.5"></td>
+                </tr>
+                <tr>
+                    <td>18:00</td>
+                    <td id="Hood_1_1_18"></td>
+                    <td id="Hood_1_2_18"></td>
+                    <td id="Hood_1_3_18"></td>
+                    <td id="Hood_2_1_18"></td>
+                    <td id="Hood_2_2_18"></td>
+                    <td id="Hood_2_3_18"></td>
+                    <td id="Hood_3_1_18"></td>
+                    <td id="Hood_3_2_18"></td>
+                    <td id="Hood_3_3_18"></td>
+                    <td id="Hood_4_1_18"></td>
+                </tr>
+            </table>
+        </section>
+        <section id="reserve_all_hood_prev">
+            <h3>저번주 예약 현황</h3>
+            <table>
+                <tr>
+                    <th></th>
+                    <th id="Hood_1_1_prev">1-1</th>
+                    <th id="Hood_1_2_prev">1-2</th>
+                    <th id="Hood_1_3_prev">1-3</th>
+                    <th id="Hood_2_1_prev">2-1</th>
+                    <th id="Hood_2_2_prev">2-2</th>
+                    <th id="Hood_2_3_prev">2-3</th>
+                    <th id="Hood_3_1_prev">3-1</th>
+                    <th id="Hood_3_2_prev">3-2</th>
+                    <th id="Hood_3_3_prev">3-3</th>
+                    <th id="Hood_4_1_prev">4-1</th>
+                </tr>
+                <tr>
+                    <td>09:00</td>
+                    <td id="Hood_1_1_9_prev"></td>
+                    <td id="Hood_1_2_9_prev"></td>
+                    <td id="Hood_1_3_9_prev"></td>
+                    <td id="Hood_2_1_9_prev"></td>
+                    <td id="Hood_2_2_9_prev"></td>
+                    <td id="Hood_2_3_9_prev"></td>
+                    <td id="Hood_3_1_9_prev"></td>
+                    <td id="Hood_3_2_9_prev"></td>
+                    <td id="Hood_3_3_9_prev"></td>
+                    <td id="Hood_4_1_9_prev"></td>
+                </tr>
+                <tr>
+                    <td>09:30</td>
+                    <td id="Hood_1_1_9.5_prev"></td>
+                    <td id="Hood_1_2_9.5_prev"></td>
+                    <td id="Hood_1_3_9.5_prev"></td>
+                    <td id="Hood_2_1_9.5_prev"></td>
+                    <td id="Hood_2_2_9.5_prev"></td>
+                    <td id="Hood_2_3_9.5_prev"></td>
+                    <td id="Hood_3_1_9.5_prev"></td>
+                    <td id="Hood_3_2_9.5_prev"></td>
+                    <td id="Hood_3_3_9.5_prev"></td>
+                    <td id="Hood_4_1_9.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>10:00</td>
+                    <td id="Hood_1_1_10_prev"></td>
+                    <td id="Hood_1_2_10_prev"></td>
+                    <td id="Hood_1_3_10_prev"></td>
+                    <td id="Hood_2_1_10_prev"></td>
+                    <td id="Hood_2_2_10_prev"></td>
+                    <td id="Hood_2_3_10_prev"></td>
+                    <td id="Hood_3_1_10_prev"></td>
+                    <td id="Hood_3_2_10_prev"></td>
+                    <td id="Hood_3_3_10_prev"></td>
+                    <td id="Hood_4_1_10_prev"></td>
+                </tr>
+                <tr>
+                    <td>10:30</td>
+                    <td id="Hood_1_1_10.5_prev"></td>
+                    <td id="Hood_1_2_10.5_prev"></td>
+                    <td id="Hood_1_3_10.5_prev"></td>
+                    <td id="Hood_2_1_10.5_prev"></td>
+                    <td id="Hood_2_2_10.5_prev"></td>
+                    <td id="Hood_2_3_10.5_prev"></td>
+                    <td id="Hood_3_1_10.5_prev"></td>
+                    <td id="Hood_3_2_10.5_prev"></td>
+                    <td id="Hood_3_3_10.5_prev"></td>
+                    <td id="Hood_4_1_10.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>11:00</td>
+                    <td id="Hood_1_1_11_prev"></td>
+                    <td id="Hood_1_2_11_prev"></td>
+                    <td id="Hood_1_3_11_prev"></td>
+                    <td id="Hood_2_1_11_prev"></td>
+                    <td id="Hood_2_2_11_prev"></td>
+                    <td id="Hood_2_3_11_prev"></td>
+                    <td id="Hood_3_1_11_prev"></td>
+                    <td id="Hood_3_2_11_prev"></td>
+                    <td id="Hood_3_3_11_prev"></td>
+                    <td id="Hood_4_1_11_prev"></td>
+                </tr>
+                <tr>
+                    <td>11:30</td>
+                    <td id="Hood_1_1_11.5_prev"></td>
+                    <td id="Hood_1_2_11.5_prev"></td>
+                    <td id="Hood_1_3_11.5_prev"></td>
+                    <td id="Hood_2_1_11.5_prev"></td>
+                    <td id="Hood_2_2_11.5_prev"></td>
+                    <td id="Hood_2_3_11.5_prev"></td>
+                    <td id="Hood_3_1_11.5_prev"></td>
+                    <td id="Hood_3_2_11.5_prev"></td>
+                    <td id="Hood_3_3_11.5_prev"></td>
+                    <td id="Hood_4_1_11.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>12:00</td>
+                    <td id="Hood_1_1_12_prev"></td>
+                    <td id="Hood_1_2_12_prev"></td>
+                    <td id="Hood_1_3_12_prev"></td>
+                    <td id="Hood_2_1_12_prev"></td>
+                    <td id="Hood_2_2_12_prev"></td>
+                    <td id="Hood_2_3_12_prev"></td>
+                    <td id="Hood_3_1_12_prev"></td>
+                    <td id="Hood_3_2_12_prev"></td>
+                    <td id="Hood_3_3_12_prev"></td>
+                    <td id="Hood_4_1_12_prev"></td>
+                </tr>
+                <tr>
+                    <td>12:30</td>
+                    <td id="Hood_1_1_12.5_prev"></td>
+                    <td id="Hood_1_2_12.5_prev"></td>
+                    <td id="Hood_1_3_12.5_prev"></td>
+                    <td id="Hood_2_1_12.5_prev"></td>
+                    <td id="Hood_2_2_12.5_prev"></td>
+                    <td id="Hood_2_3_12.5_prev"></td>
+                    <td id="Hood_3_1_12.5_prev"></td>
+                    <td id="Hood_3_2_12.5_prev"></td>
+                    <td id="Hood_3_3_12.5_prev"></td>
+                    <td id="Hood_4_1_12.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>13:00</td>
+                    <td id="Hood_1_1_13_prev"></td>
+                    <td id="Hood_1_2_13_prev"></td>
+                    <td id="Hood_1_3_13_prev"></td>
+                    <td id="Hood_2_1_13_prev"></td>
+                    <td id="Hood_2_2_13_prev"></td>
+                    <td id="Hood_2_3_13_prev"></td>
+                    <td id="Hood_3_1_13_prev"></td>
+                    <td id="Hood_3_2_13_prev"></td>
+                    <td id="Hood_3_3_13_prev"></td>
+                    <td id="Hood_4_1_13_prev"></td>
+                </tr>
+                <tr>
+                    <td>13:30</td>
+                    <td id="Hood_1_1_13.5_prev"></td>
+                    <td id="Hood_1_2_13.5_prev"></td>
+                    <td id="Hood_1_3_13.5_prev"></td>
+                    <td id="Hood_2_1_13.5_prev"></td>
+                    <td id="Hood_2_2_13.5_prev"></td>
+                    <td id="Hood_2_3_13.5_prev"></td>
+                    <td id="Hood_3_1_13.5_prev"></td>
+                    <td id="Hood_3_2_13.5_prev"></td>
+                    <td id="Hood_3_3_13.5_prev"></td>
+                    <td id="Hood_4_1_13.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>14:00</td>
+                    <td id="Hood_1_1_14_prev"></td>
+                    <td id="Hood_1_2_14_prev"></td>
+                    <td id="Hood_1_3_14_prev"></td>
+                    <td id="Hood_2_1_14_prev"></td>
+                    <td id="Hood_2_2_14_prev"></td>
+                    <td id="Hood_2_3_14_prev"></td>
+                    <td id="Hood_3_1_14_prev"></td>
+                    <td id="Hood_3_2_14_prev"></td>
+                    <td id="Hood_3_3_14_prev"></td>
+                    <td id="Hood_4_1_14_prev"></td>
+                </tr>
+                <tr>
+                    <td>14:30</td>
+                    <td id="Hood_1_1_14.5_prev"></td>
+                    <td id="Hood_1_2_14.5_prev"></td>
+                    <td id="Hood_1_3_14.5_prev"></td>
+                    <td id="Hood_2_1_14.5_prev"></td>
+                    <td id="Hood_2_2_14.5_prev"></td>
+                    <td id="Hood_2_3_14.5_prev"></td>
+                    <td id="Hood_3_1_14.5_prev"></td>
+                    <td id="Hood_3_2_14.5_prev"></td>
+                    <td id="Hood_3_3_14.5_prev"></td>
+                    <td id="Hood_4_1_14.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>15:00</td>
+                    <td id="Hood_1_1_15_prev"></td>
+                    <td id="Hood_1_2_15_prev"></td>
+                    <td id="Hood_1_3_15_prev"></td>
+                    <td id="Hood_2_1_15_prev"></td>
+                    <td id="Hood_2_2_15_prev"></td>
+                    <td id="Hood_2_3_15_prev"></td>
+                    <td id="Hood_3_1_15_prev"></td>
+                    <td id="Hood_3_2_15_prev"></td>
+                    <td id="Hood_3_3_15_prev"></td>
+                    <td id="Hood_4_1_15_prev"></td>
+                </tr>
+                <tr>
+                    <td>15:30</td>
+                    <td id="Hood_1_1_15.5_prev"></td>
+                    <td id="Hood_1_2_15.5_prev"></td>
+                    <td id="Hood_1_3_15.5_prev"></td>
+                    <td id="Hood_2_1_15.5_prev"></td>
+                    <td id="Hood_2_2_15.5_prev"></td>
+                    <td id="Hood_2_3_15.5_prev"></td>
+                    <td id="Hood_3_1_15.5_prev"></td>
+                    <td id="Hood_3_2_15.5_prev"></td>
+                    <td id="Hood_3_3_15.5_prev"></td>
+                    <td id="Hood_4_1_15.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>16:00</td>
+                    <td id="Hood_1_1_16_prev"></td>
+                    <td id="Hood_1_2_16_prev"></td>
+                    <td id="Hood_1_3_16_prev"></td>
+                    <td id="Hood_2_1_16_prev"></td>
+                    <td id="Hood_2_2_16_prev"></td>
+                    <td id="Hood_2_3_16_prev"></td>
+                    <td id="Hood_3_1_16_prev"></td>
+                    <td id="Hood_3_2_16_prev"></td>
+                    <td id="Hood_3_3_16_prev"></td>
+                    <td id="Hood_4_1_16_prev"></td>
+                </tr>
+                <tr>
+                    <td>16:30</td>
+                    <td id="Hood_1_1_16.5_prev"></td>
+                    <td id="Hood_1_2_16.5_prev"></td>
+                    <td id="Hood_1_3_16.5_prev"></td>
+                    <td id="Hood_2_1_16.5_prev"></td>
+                    <td id="Hood_2_2_16.5_prev"></td>
+                    <td id="Hood_2_3_16.5_prev"></td>
+                    <td id="Hood_3_1_16.5_prev"></td>
+                    <td id="Hood_3_2_16.5_prev"></td>
+                    <td id="Hood_3_3_16.5_prev"></td>
+                    <td id="Hood_4_1_16.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>17:00</td>
+                    <td id="Hood_1_1_17_prev"></td>
+                    <td id="Hood_1_2_17_prev"></td>
+                    <td id="Hood_1_3_17_prev"></td>
+                    <td id="Hood_2_1_17_prev"></td>
+                    <td id="Hood_2_2_17_prev"></td>
+                    <td id="Hood_2_3_17_prev"></td>
+                    <td id="Hood_3_1_17_prev"></td>
+                    <td id="Hood_3_2_17_prev"></td>
+                    <td id="Hood_3_3_17_prev"></td>
+                    <td id="Hood_4_1_17_prev"></td>
+                </tr>
+                <tr>
+                    <td>17:30</td>
+                    <td id="Hood_1_1_17.5_prev"></td>
+                    <td id="Hood_1_2_17.5_prev"></td>
+                    <td id="Hood_1_3_17.5_prev"></td>
+                    <td id="Hood_2_1_17.5_prev"></td>
+                    <td id="Hood_2_2_17.5_prev"></td>
+                    <td id="Hood_2_3_17.5_prev"></td>
+                    <td id="Hood_3_1_17.5_prev"></td>
+                    <td id="Hood_3_2_17.5_prev"></td>
+                    <td id="Hood_3_3_17.5_prev"></td>
+                    <td id="Hood_4_1_17.5_prev"></td>
+                </tr>
+                <tr>
+                    <td>18:00</td>
+                    <td id="Hood_1_1_18_prev"></td>
+                    <td id="Hood_1_2_18_prev"></td>
+                    <td id="Hood_1_3_18_prev"></td>
+                    <td id="Hood_2_1_18_prev"></td>
+                    <td id="Hood_2_2_18_prev"></td>
+                    <td id="Hood_2_3_18_prev"></td>
+                    <td id="Hood_3_1_18_prev"></td>
+                    <td id="Hood_3_2_18_prev"></td>
+                    <td id="Hood_3_3_18_prev"></td>
+                    <td id="Hood_4_1_18_prev"></td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="reserve_all_hood_next">
+            <h3>다음주 예약 현황</h3>
+            <table>
+                <tr>
+                    <th></th>
+                    <th id="Hood_1_1_next">1-1</th>
+                    <th id="Hood_1_2_next">1-2</th>
+                    <th id="Hood_1_3_next">1-3</th>
+                    <th id="Hood_2_1_next">2-1</th>
+                    <th id="Hood_2_2_next">2-2</th>
+                    <th id="Hood_2_3_next">2-3</th>
+                    <th id="Hood_3_1_next">3-1</th>
+                    <th id="Hood_3_2_next">3-2</th>
+                    <th id="Hood_3_3_next">3-3</th>
+                    <th id="Hood_4_1_next">4-1</th>
+                </tr>
+                <tr>
+                    <td>09:00</td>
+                    <td id="Hood_1_1_9_next"></td>
+                    <td id="Hood_1_2_9_next"></td>
+                    <td id="Hood_1_3_9_next"></td>
+                    <td id="Hood_2_1_9_next"></td>
+                    <td id="Hood_2_2_9_next"></td>
+                    <td id="Hood_2_3_9_next"></td>
+                    <td id="Hood_3_1_9_next"></td>
+                    <td id="Hood_3_2_9_next"></td>
+                    <td id="Hood_3_3_9_next"></td>
+                    <td id="Hood_4_1_9_next"></td>
+                </tr>
+                <tr>
+                    <td>09:30</td>
+                    <td id="Hood_1_1_9.5_next"></td>
+                    <td id="Hood_1_2_9.5_next"></td>
+                    <td id="Hood_1_3_9.5_next"></td>
+                    <td id="Hood_2_1_9.5_next"></td>
+                    <td id="Hood_2_2_9.5_next"></td>
+                    <td id="Hood_2_3_9.5_next"></td>
+                    <td id="Hood_3_1_9.5_next"></td>
+                    <td id="Hood_3_2_9.5_next"></td>
+                    <td id="Hood_3_3_9.5_next"></td>
+                    <td id="Hood_4_1_9.5_next"></td>
+                </tr>
+                <tr>
+                    <td>10:00</td>
+                    <td id="Hood_1_1_10_next"></td>
+                    <td id="Hood_1_2_10_next"></td>
+                    <td id="Hood_1_3_10_next"></td>
+                    <td id="Hood_2_1_10_next"></td>
+                    <td id="Hood_2_2_10_next"></td>
+                    <td id="Hood_2_3_10_next"></td>
+                    <td id="Hood_3_1_10_next"></td>
+                    <td id="Hood_3_2_10_next"></td>
+                    <td id="Hood_3_3_10_next"></td>
+                    <td id="Hood_4_1_10_next"></td>
+                </tr>
+                <tr>
+                    <td>10:30</td>
+                    <td id="Hood_1_1_10.5_next"></td>
+                    <td id="Hood_1_2_10.5_next"></td>
+                    <td id="Hood_1_3_10.5_next"></td>
+                    <td id="Hood_2_1_10.5_next"></td>
+                    <td id="Hood_2_2_10.5_next"></td>
+                    <td id="Hood_2_3_10.5_next"></td>
+                    <td id="Hood_3_1_10.5_next"></td>
+                    <td id="Hood_3_2_10.5_next"></td>
+                    <td id="Hood_3_3_10.5_next"></td>
+                    <td id="Hood_4_1_10.5_next"></td>
+                </tr>
+                <tr>
+                    <td>11:00</td>
+                    <td id="Hood_1_1_11_next"></td>
+                    <td id="Hood_1_2_11_next"></td>
+                    <td id="Hood_1_3_11_next"></td>
+                    <td id="Hood_2_1_11_next"></td>
+                    <td id="Hood_2_2_11_next"></td>
+                    <td id="Hood_2_3_11_next"></td>
+                    <td id="Hood_3_1_11_next"></td>
+                    <td id="Hood_3_2_11_next"></td>
+                    <td id="Hood_3_3_11_next"></td>
+                    <td id="Hood_4_1_11_next"></td>
+                </tr>
+                <tr>
+                    <td>11:30</td>
+                    <td id="Hood_1_1_11.5_next"></td>
+                    <td id="Hood_1_2_11.5_next"></td>
+                    <td id="Hood_1_3_11.5_next"></td>
+                    <td id="Hood_2_1_11.5_next"></td>
+                    <td id="Hood_2_2_11.5_next"></td>
+                    <td id="Hood_2_3_11.5_next"></td>
+                    <td id="Hood_3_1_11.5_next"></td>
+                    <td id="Hood_3_2_11.5_next"></td>
+                    <td id="Hood_3_3_11.5_next"></td>
+                    <td id="Hood_4_1_11.5_next"></td>
+                </tr>
+                <tr>
+                    <td>12:00</td>
+                    <td id="Hood_1_1_12_next"></td>
+                    <td id="Hood_1_2_12_next"></td>
+                    <td id="Hood_1_3_12_next"></td>
+                    <td id="Hood_2_1_12_next"></td>
+                    <td id="Hood_2_2_12_next"></td>
+                    <td id="Hood_2_3_12_next"></td>
+                    <td id="Hood_3_1_12_next"></td>
+                    <td id="Hood_3_2_12_next"></td>
+                    <td id="Hood_3_3_12_next"></td>
+                    <td id="Hood_4_1_12_next"></td>
+                </tr>
+                <tr>
+                    <td>12:30</td>
+                    <td id="Hood_1_1_12.5_next"></td>
+                    <td id="Hood_1_2_12.5_next"></td>
+                    <td id="Hood_1_3_12.5_next"></td>
+                    <td id="Hood_2_1_12.5_next"></td>
+                    <td id="Hood_2_2_12.5_next"></td>
+                    <td id="Hood_2_3_12.5_next"></td>
+                    <td id="Hood_3_1_12.5_next"></td>
+                    <td id="Hood_3_2_12.5_next"></td>
+                    <td id="Hood_3_3_12.5_next"></td>
+                    <td id="Hood_4_1_12.5_next"></td>
+                </tr>
+                <tr>
+                    <td>13:00</td>
+                    <td id="Hood_1_1_13_next"></td>
+                    <td id="Hood_1_2_13_next"></td>
+                    <td id="Hood_1_3_13_next"></td>
+                    <td id="Hood_2_1_13_next"></td>
+                    <td id="Hood_2_2_13_next"></td>
+                    <td id="Hood_2_3_13_next"></td>
+                    <td id="Hood_3_1_13_next"></td>
+                    <td id="Hood_3_2_13_next"></td>
+                    <td id="Hood_3_3_13_next"></td>
+                    <td id="Hood_4_1_13_next"></td>
+                </tr>
+                <tr>
+                    <td>13:30</td>
+                    <td id="Hood_1_1_13.5_next"></td>
+                    <td id="Hood_1_2_13.5_next"></td>
+                    <td id="Hood_1_3_13.5_next"></td>
+                    <td id="Hood_2_1_13.5_next"></td>
+                    <td id="Hood_2_2_13.5_next"></td>
+                    <td id="Hood_2_3_13.5_next"></td>
+                    <td id="Hood_3_1_13.5_next"></td>
+                    <td id="Hood_3_2_13.5_next"></td>
+                    <td id="Hood_3_3_13.5_next"></td>
+                    <td id="Hood_4_1_13.5_next"></td>
+                </tr>
+                <tr>
+                    <td>14:00</td>
+                    <td id="Hood_1_1_14_next"></td>
+                    <td id="Hood_1_2_14_next"></td>
+                    <td id="Hood_1_3_14_next"></td>
+                    <td id="Hood_2_1_14_next"></td>
+                    <td id="Hood_2_2_14_next"></td>
+                    <td id="Hood_2_3_14_next"></td>
+                    <td id="Hood_3_1_14_next"></td>
+                    <td id="Hood_3_2_14_next"></td>
+                    <td id="Hood_3_3_14_next"></td>
+                    <td id="Hood_4_1_14_next"></td>
+                </tr>
+                <tr>
+                    <td>14:30</td>
+                    <td id="Hood_1_1_14.5_next"></td>
+                    <td id="Hood_1_2_14.5_next"></td>
+                    <td id="Hood_1_3_14.5_next"></td>
+                    <td id="Hood_2_1_14.5_next"></td>
+                    <td id="Hood_2_2_14.5_next"></td>
+                    <td id="Hood_2_3_14.5_next"></td>
+                    <td id="Hood_3_1_14.5_next"></td>
+                    <td id="Hood_3_2_14.5_next"></td>
+                    <td id="Hood_3_3_14.5_next"></td>
+                    <td id="Hood_4_1_14.5_next"></td>
+                </tr>
+                <tr>
+                    <td>15:00</td>
+                    <td id="Hood_1_1_15_next"></td>
+                    <td id="Hood_1_2_15_next"></td>
+                    <td id="Hood_1_3_15_next"></td>
+                    <td id="Hood_2_1_15_next"></td>
+                    <td id="Hood_2_2_15_next"></td>
+                    <td id="Hood_2_3_15_next"></td>
+                    <td id="Hood_3_1_15_next"></td>
+                    <td id="Hood_3_2_15_next"></td>
+                    <td id="Hood_3_3_15_next"></td>
+                    <td id="Hood_4_1_15_next"></td>
+                </tr>
+                <tr>
+                    <td>15:30</td>
+                    <td id="Hood_1_1_15.5_next"></td>
+                    <td id="Hood_1_2_15.5_next"></td>
+                    <td id="Hood_1_3_15.5_next"></td>
+                    <td id="Hood_2_1_15.5_next"></td>
+                    <td id="Hood_2_2_15.5_next"></td>
+                    <td id="Hood_2_3_15.5_next"></td>
+                    <td id="Hood_3_1_15.5_next"></td>
+                    <td id="Hood_3_2_15.5_next"></td>
+                    <td id="Hood_3_3_15.5_next"></td>
+                    <td id="Hood_4_1_15.5_next"></td>
+                </tr>
+                <tr>
+                    <td>16:00</td>
+                    <td id="Hood_1_1_16_next"></td>
+                    <td id="Hood_1_2_16_next"></td>
+                    <td id="Hood_1_3_16_next"></td>
+                    <td id="Hood_2_1_16_next"></td>
+                    <td id="Hood_2_2_16_next"></td>
+                    <td id="Hood_2_3_16_next"></td>
+                    <td id="Hood_3_1_16_next"></td>
+                    <td id="Hood_3_2_16_next"></td>
+                    <td id="Hood_3_3_16_next"></td>
+                    <td id="Hood_4_1_16_next"></td>
+                </tr>
+                <tr>
+                    <td>16:30</td>
+                    <td id="Hood_1_1_16.5_next"></td>
+                    <td id="Hood_1_2_16.5_next"></td>
+                    <td id="Hood_1_3_16.5_next"></td>
+                    <td id="Hood_2_1_16.5_next"></td>
+                    <td id="Hood_2_2_16.5_next"></td>
+                    <td id="Hood_2_3_16.5_next"></td>
+                    <td id="Hood_3_1_16.5_next"></td>
+                    <td id="Hood_3_2_16.5_next"></td>
+                    <td id="Hood_3_3_16.5_next"></td>
+                    <td id="Hood_4_1_16.5_next"></td>
+                </tr>
+                <tr>
+                    <td>17:00</td>
+                    <td id="Hood_1_1_17_next"></td>
+                    <td id="Hood_1_2_17_next"></td>
+                    <td id="Hood_1_3_17_next"></td>
+                    <td id="Hood_2_1_17_next"></td>
+                    <td id="Hood_2_2_17_next"></td>
+                    <td id="Hood_2_3_17_next"></td>
+                    <td id="Hood_3_1_17_next"></td>
+                    <td id="Hood_3_2_17_next"></td>
+                    <td id="Hood_3_3_17_next"></td>
+                    <td id="Hood_4_1_17_next"></td>
+                </tr>
+                <tr>
+                    <td>17:30</td>
+                    <td id="Hood_1_1_17.5_next"></td>
+                    <td id="Hood_1_2_17.5_next"></td>
+                    <td id="Hood_1_3_17.5_next"></td>
+                    <td id="Hood_2_1_17.5_next"></td>
+                    <td id="Hood_2_2_17.5_next"></td>
+                    <td id="Hood_2_3_17.5_next"></td>
+                    <td id="Hood_3_1_17.5_next"></td>
+                    <td id="Hood_3_2_17.5_next"></td>
+                    <td id="Hood_3_3_17.5_next"></td>
+                    <td id="Hood_4_1_17.5_next"></td>
+                </tr>
+                <tr>
+                    <td>18:00</td>
+                    <td id="Hood_1_1_18_next"></td>
+                    <td id="Hood_1_2_18_next"></td>
+                    <td id="Hood_1_3_18_next"></td>
+                    <td id="Hood_2_1_18_next"></td>
+                    <td id="Hood_2_2_18_next"></td>
+                    <td id="Hood_2_3_18_next"></td>
+                    <td id="Hood_3_1_18_next"></td>
+                    <td id="Hood_3_2_18_next"></td>
+                    <td id="Hood_3_3_18_next"></td>
+                    <td id="Hood_4_1_18_next"></td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    </div>
+</div>
+    <footer>
+        <div style="width:30; height:30px; float:left; margin:15px;">
+            <img src="{% static 'reservation/tmdCiL.png' %}" alt="footer_logo" />
+        </div>
+        <span class="contact" style="font-size:x-large; color:inherit ;">
+                <a href="https://open.kakao.com/o/srtwxB0d" target="_blank" style="color:white;"><i class="far fa-comment"></i></a>
+                <a href="https://www.tmdlab.com/#/w/ko/home" target="_blank" style="color:white;">티엠디랩</a>
+
+        </span>
+        <p>티엠디랩 Tel: 02-6216-0080</p>
+        <p>만든사람 <span style="font-size: medium;"><a target="_blank" style="color:white; text-decoration: none;" href="https://github.com/MCprotein">신윤수</a></span></p>
+        <p class="copyright">Copyright(c) SYS. All rights reserved.</p>
+    </footer>
+    <script src="{% static 'reservation/main.js' %}"></script>
+    <script>
+        $(function() {
+            //input을 datepicker로 선언
+            $("#datepicker").datepicker({
+                dateFormat: 'yy-mm-dd ' //Input Display Format 변경
+                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+                ,showMonthAfterYear:false //년도 먼저 나오고, 뒤에 월 표시
+                ,changeYear: true //콤보박스에서 년 선택 가능
+                ,changeMonth: true //콤보박스에서 월 선택 가능
+                ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+                ,buttonImageOnly: true //기본 버튼의 회색 부분을 없애고, 이미지만 보이게 함
+                ,buttonText: "선택" //버튼에 마우스 갖다 댔을 때 표시되는 텍스트
+                ,yearSuffix: "년" //달력의 년도 부분 뒤에 붙는 텍스트
+                ,monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'] //달력의 월 부분 텍스트
+                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip 텍스트
+                ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 부분 텍스트
+                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 부분 Tooltip 텍스트
+                ,minDate: "+{{weekday_mark}}D" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+                ,maxDate: "+{{date_diff}}D" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+            });
+
+            //초기값을 오늘 날짜로 설정
+            $('#datepicker').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        });
+    </script>
+    <script type="text/javascript">
+        // New 페이지 이동
+        function goNewMon(){
+            location.href="/reservation/new/hood/0";
+        }
+        function goNewTue(){
+            location.href="/reservation/new/hood/1";
+        }
+        function goNewWed(){
+            location.href="/reservation/new/hood/2";
+        }
+        function goNewThur(){
+            location.href="/reservation/new/hood/3";
+        }
+        function goNewFri(){
+            location.href="/reservation/new/hood/4";
+        }
+        function goNewSat(){
+            location.href="/reservation/new/hood/5";
+        }
+        function goNewSun(){
+            location.href="/reservation/new/hood/6";
+        }
+        function goNewPress(){
+            location.href="/reservation/new/Press";
+        }
+
+        // finish 시간 세팅
+        function finishSet(){
+            $('#equip_finish_time').empty();
+            var start_time = $('#equip_start_time').val(); // 시작시간 가져오기
+            var hour = Math.floor(start_time); // 시 가져오기
+            var min = start_time-hour // 분 가져오기
+            for(var cnt = 0; cnt<19; cnt++){
+                // 시간 늘리기
+                min = min+0.5;
+                if(min == 1){
+                    hour+=1;
+                    min=0;
+                }
+
+                // 탈출 조건
+                if(hour+min == 19){
+                    break;
+                }
+
+                // 출력양식 조절
+                if(hour == 9 && min== 0.5){
+                    var option = $("<option value="+(hour+min)+">0"+hour+":"+ "30</option>");
+                }
+                else if(min==0){
+                    var option = $("<option value="+(hour+min)+">"+hour+":"+ min + "0</option>");
+                }
+                else{
+                    var option = $("<option value="+(hour+min)+">"+hour+":" +"30</option>");
+                }
+                $('#equip_finish_time').append(option);
+
+
+            }
+
+        }
+    </script>
+    <!-- 색칠하기 Script -->
+    <script type="text/javascript">
+        $(function() {
+            var day_list = {{day_list}};
+            var equipment_name = ['Hood_1_1', 'Hood_1_2', 'Hood_1_3', 'Hood_2_1', 'Hood_2_2', 'Hood_2_3', 'Hood_3_1', 'Hood_3_2', 'Hood_3_3', 'Hood_4_1'];
+            var author_username = '{{author_username|safe}}';
+            // 시작 날짜 세팅
+            var day = new Date();
+            day.setDate(day.getDate()+{{start_day_diff}}-1);
+
+            // 예약 세팅
+
+
+            for(var i =0; i<11;i++){
+                // 요일 세팅
+                var yoil = {{yoil}};
+
+                <!--   여기서 장비값 받아서    -->
+                for(var j=0; j<day_list[i].length; j++){
+                    document.getElementById( equipment_name[i]+'_'+day_list[i][j] ).innerHTML='{{author_username}}';
+                    if( yoil == 0 )
+                        document.getElementById( equipment_name[i]+'_'+day_list[i][j] ).style.backgroundColor='rgba(87, 144, 246)';
+                    else if( yoil == 1)
+                        document.getElementById( equipment_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 2)
+                        document.getElementById( equipment_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 3)
+                        document.getElementById( equipment_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 4)
+                        document.getElementById( equipment_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 5)
+                        document.getElementById( equipment_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 6)
+                        document.getElementById( equipment_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(87, 191, 141)';
+                }
+            }
+
+        });
+    </script>
+
+<script type="text/javascript">
+        $(function() {
+            var day_list_prev = {{day_list_prev}};
+            var equipment_name = ['Hood_1_1', 'Hood_1_2', 'Hood_1_3', 'Hood_2_1', 'Hood_2_2', 'Hood_2_3', 'Hood_3_1', 'Hood_3_2', 'Hood_3_3', 'Hood_4_1'];
+            var author_username_prev = '{{author_username|safe}}';
+            // 시작 날짜 세팅
+            var day_prev = new Date();
+            day_prev.setDate(day_prev.getDate()+{{start_day_diff}}-8);
+
+            // 예약 세팅
+
+            for(var i =0; i<11;i++){
+                // 요일 세팅
+                var yoil = {{yoil}};
+
+                for(var j=0; j<day_list_prev[i].length; j++){
+                    document.getElementById( equipment_name[i]+'_'+day_list[i][j]+'_prev' ).innerHTML='{{author_username}}';
+                    if( yoil == 0 )
+                        document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 144, 246)';
+                    else if( yoil == 1)
+                        document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 2)
+                        document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 3)
+                        document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 4)
+                        document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 5)
+                        document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 6)
+                        document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 191, 141)';
+                }
+            }
+        });
+
+    </script>
+
+<script type="text/javascript">
+        $(function() {
+            var day_list_next = {{day_list_next}};
+            var equipment_name = ['Hood_1_1', 'Hood_1_2', 'Hood_1_3', 'Hood_2_1', 'Hood_2_2', 'Hood_2_3', 'Hood_3_1', 'Hood_3_2', 'Hood_3_3', 'Hood_4_1'];
+            var author_username_next = '{{author_username|safe}}';
+            // 시작 날짜 세팅
+            var day_next = new Date();
+            day_next.setDate(day_next.getDate()+{{start_day_diff}}+6);
+
+
+            // 예약 세팅
+
+            for(var i =0; i<11;i++){
+                // 요일 세팅
+                var yoil = {{yoil}};
+
+                for(var j=0; j<day_list_next[i].length; j++){
+                    document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).innerHTML='{{author_username}}';
+                    if( yoil == 0 )
+                        document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 144, 246)';
+                    else if( yoil == 1)
+                        document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 2)
+                        document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 3)
+                        document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 4)
+                        document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 5)
+                        document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 191, 141)';
+                    else if( yoil == 6)
+                        document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 191, 141)';
+                }
+            }
+        });
+
+    </script>
+
+    <!-- Ajax 예약 점검 -->
+    <script type="text/javascript">
+        $("#equip_check").click(function(){
+            var equipment_type = $('#equipment_type').val();
+            var equipment_date = $('#datepicker').val();
+            var equip_start_time = $('#equip_start_time').val();
+            var equip_finish_time= $('#equip_finish_time').val();
+
+            $.ajax({ // ajax로 서버와 통신하겠다.
+                type: "POST", // 데이터를 전송하는 방법을 지정
+                url: "{% url 'reservation:check' %}", // 통신할 url을 지정
+                data: {'equipment_type': equipment_type, 'equipment_date': equipment_date, 'equip_start_time':equip_start_time, 'equip_finish_time':equip_finish_time, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, // 서버로 데이터 전송시 옵션
+                dataType: "json", // 서버측에서 전송한 데이터를 어떤 형식의 데이터로서 해석할 것인가를 지정, 없으면 알아서 판단
+                // 서버측에서 전송한 Response 데이터 형식 (json)
+                // {'likes_count': post.like_count, 'message': message }
+                success: function(response){ // 통신 성공시 - 동적으로 좋아요 갯수 변경, 유저 목록 변경
+                    // 성공 시
+                    if(response.check_error == 0){
+                        var result = confirm("예약하시겠습니까?");
+                        if(result){
+                            $('#new_form').submit(); // 제출
+                        }
+                    }
+                    // 실패
+                    else{
+                        alert(response.message);
+                    }
+                },
+                error: function(request, status, error){ // 통신 실패시 - 로그인 페이지 리다이렉트
+                    alert("입력값을 다시 한번 확인 부탁드립니다");
+                },
+            });
+        })
+    </script>
+{% endblock %}
+{% block style %}
+<style>
+    #equip_check{
+        width: 70px;
+        height: 35px;
+        bottom: 15vh;
+        background: rgba(218,33,39);
+        font-size: 1em;
+        color: rgb(225,225,225);
+        border: none;
+        border-radius: 3px;
+    }
+
+    #equip_check:hover{
+        cursor: pointer;
+    }
+
+    main>#reserve_all_hood td{
+        color:aliceblue;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    main>#reserve_all_hood_prev td{
+        color:aliceblue;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    main>#reserve_all_hood_next td{
+        color:aliceblue;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+@media only screen and (min-height: 672px) {
+    footer{
+        position: fixed;
+    }
+}
+</style>
+{% endblock %}
+
