@@ -21,18 +21,23 @@ from .tokens import account_activation_token
 def signup(request):
 
     if request.method == "POST":
-        if request.POST['password1'] == request.POST['password2']: # 추후 forms.py로 변경
+        if request.POST.get('password1') == request.POST.get('password2'): # 추후 forms.py로 변경
             # 유저 만들기
-            mail_to = request.POST['email'] + "@gmail.com" # 지메일 # 추후 구글웹로그인으로 변경
+            mail_to = request.POST.get('email') + "@gmail.com" # 지메일 # 추후 구글웹로그인으로 변경
 
             # 이메일 중복일 경우 실패
-            if len(User.objects.filter(email=mail_to)) == 0:
-                new_user = User.objects.create_user(username=request.POST['username'], email=mail_to, password=request.POST['password1'])
+            # if len(User.objects.filter(email=mail_to)) == 0:
+            if User.objects.filter(email=mail_to).exists():
+                # new_user = User.objects.create(username=request.POST.get('username'), password=request.POST.get('password1'))
+                new_user = request.user
+                new_user.set_password(request.POST.get('password1'))
+                new_user.set_email(request.POST.get('email'))
                 new_user.is_active = False
                 new_user.save()
-                realname = request.POST['realname'] # 이름
-                department = request.POST['department'] # 소속
-                profile = Profile(user=new_user, realname=realname, department=department)
+                realname = request.POST.get('realname') # 이름
+                department = request.POST.get('department') # 소속
+                email = mail_to
+                profile = Profile(user=new_user, realname=realname, department=department, email=email)
                 profile.save() # 프로필 저장
 
                 current_site = get_current_site(request)
@@ -45,6 +50,7 @@ def signup(request):
                 mail_title = "티엠디랩 실험실 장비 예약 시스템 계정 활성화 확인"
                 email = EmailMessage(mail_title, message, to=[mail_to])
                 email.send()
+
                 today = datetime.now()
                 equip_Hood_1_1 = Reservation.objects.filter(equipment_date=today, equipment_type='Hood_1_1')
                 equip_Hood_1_2 = Reservation.objects.filter(equipment_date=today, equipment_type='Hood_1_2')
@@ -119,8 +125,8 @@ def confirm(request):
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -137,9 +143,9 @@ def logout(request):
         return redirect('home')
     return render(request, 'accounts/signup.html')
 
-def activate(request, uid64, token):
+def activate(request, uidb64, token):
     try:
-        uid = force_str(urlsafe_base64_decode(uid64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
