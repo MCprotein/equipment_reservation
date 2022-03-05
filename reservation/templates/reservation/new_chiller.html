@@ -722,9 +722,12 @@
         });
     </script>
     <script type="text/javascript">
+
+        var today = new Date().getDay();
+        today -= 1
         // New 페이지 이동
         function goNewHood(){
-            location.href="/reservation/new/Hood/0";
+            location.href="/reservation/new/hood/"+ today ;
         }
         function goNewChiller_D(){
             location.href="/reservation/new/chiller/Chiller_D";

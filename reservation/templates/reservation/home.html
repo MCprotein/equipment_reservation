@@ -85,9 +85,11 @@
             }
         });
 
+        var today = new Date().getDay();
+        today -= 1
         // New 페이지 이동
         function goNewHood(){
-            location.href="/reservation/new/hood/0";
+            location.href="/reservation/new/hood/"+ today ;
         }
         function goNewChiller(){
             location.href="/reservation/new/chiller/Chiller_D";
