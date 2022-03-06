@@ -1099,7 +1099,7 @@
             // 시작 날짜 세팅
             var day = new Date();
             day.setDate(day.getDate()+{{start_day_diff}}-1);
-
+            var name_list = {{name_list|safe}};
             // 예약 세팅
 
 
@@ -1109,7 +1109,7 @@
 
                 <!--   여기서 장비값 받아서    -->
                 for(var j=0; j<day_list[i].length; j++){
-                    document.getElementById( equipment_name[i]+'_'+day_list[i][j] ).innerHTML='{{author_username}}';
+                    document.getElementById( equipment_name[i]+'_'+day_list[i][j] ).innerHTML=name_list[i][j];
                     if( yoil == 0 )
                         document.getElementById( equipment_name[i]+'_'+day_list[i][j] ).style.backgroundColor='rgba(87, 144, 246)';
                     else if( yoil == 1)
@@ -1138,6 +1138,7 @@
             // 시작 날짜 세팅
             var day_prev = new Date();
             day_prev.setDate(day_prev.getDate()+{{start_day_diff}}-8);
+            var name_list_prev = {{name_list_prev|safe}};
 
             // 예약 세팅
 
@@ -1146,7 +1147,7 @@
                 var yoil = {{yoil}};
 
                 for(var j=0; j<day_list_prev[i].length; j++){
-                    document.getElementById( equipment_name[i]+'_'+day_list[i][j]+'_prev' ).innerHTML='{{author_username}}';
+                    document.getElementById( equipment_name[i]+'_'+day_list[i][j]+'_prev' ).innerHTML=name_list_prev[i][j];
                     if( yoil == 0 )
                         document.getElementById( equipment_name[i]+'_'+day_list_prev[i][j]+'_prev' ).style.backgroundColor='rgba(87, 144, 246)';
                     else if( yoil == 1)
@@ -1175,7 +1176,7 @@
             // 시작 날짜 세팅
             var day_next = new Date();
             day_next.setDate(day_next.getDate()+{{start_day_diff}}+6);
-
+            var name_list_next = {{name_list_next|safe}};
 
             // 예약 세팅
 
@@ -1184,7 +1185,7 @@
                 var yoil = {{yoil}};
 
                 for(var j=0; j<day_list_next[i].length; j++){
-                    document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).innerHTML='{{author_username}}';
+                    document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).innerHTML=name_list_next[i][j];
                     if( yoil == 0 )
                         document.getElementById( equipment_name[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 144, 246)';
                     else if( yoil == 1)

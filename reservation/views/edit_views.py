@@ -30,11 +30,12 @@ def new(request, equipment_type):
 
     # 현재 예약 상황 넘겨 주기
     reservations = Reservation.objects.all()
-    day_list = []
+
 
     #  월~일 예약된 장비 목록 보여주기
 
     #  이번주
+    day_list = []
     name_list = []
     for i in range(0,7): # 토, 일 5, 6
         day = start_day + timedelta(days=i)
@@ -51,13 +52,9 @@ def new(request, equipment_type):
                 user_list.append(res.author.username)
         day_list.append(temp_list) # 일주일치
         name_list.append(user_list)
-        print(user_list)
-        print(reservations_day)
-        print(temp_list)
-    print(name_list)
-    print(day_list)
     # 저번주
     day_list_prev = []
+    name_list_prev = []
     for i in range(0,7): # 토, 일 5, 6
         # day_prev = start_day + timedelta(days=i) - timedelta(days=11)
         day_prev = start_day_prev + timedelta(days=i)
@@ -67,12 +64,17 @@ def new(request, equipment_type):
             equipment_date=day_prev
         ).order_by('equip_start_time')
         temp_list_prev = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
+        user_list_prev = []
         for res_prev in reservations_day_prev:
             temp_list_prev.extend(myrange(res_prev.equip_start_time, res_prev.equip_finish_time, 0.5))
+            for _ in myrange(res_prev.equip_start_time,res_prev.equip_finish_time, 0.5):
+                user_list_prev.append(res_prev.author.username)
         day_list_prev.append(temp_list_prev)
+        name_list_prev.append(user_list_prev)
 
     # 다음주
     day_list_next = []
+    name_list_next = []
     for i in range(0, 7):  # 토, 일 5, 6
         # day_next = start_day + timedelta(days=i) + timedelta(days=9)
         day_next = start_day_next + timedelta(days=i)
@@ -81,10 +83,14 @@ def new(request, equipment_type):
             # author__username=request.user.username,
             equipment_date=day_next
         ).order_by('equip_start_time')
+        user_list_next = []
         temp_list_next = []  # 예약 시작 시간, 예약 끝 시간, 간격(30분)
         for res_next in reservations_day_next:
             temp_list_next.extend(myrange(res_next.equip_start_time, res_next.equip_finish_time, 0.5))
+            for _ in myrange(res_next.equip_start_time,res_next.equip_finish_time, 0.5):
+                user_list_next.append(res_next.author.username)
         day_list_next.append(temp_list_next)
+        name_list_next.append(user_list_next)
 
     # if equipment_type == "Chiller_D" or equipment_type == "Chiller_J":
     if 'Chiller' in equipment_type:
@@ -99,8 +105,10 @@ def new(request, equipment_type):
 
             # prev
             'day_list_prev': day_list_prev,
+            'name_list_prev': name_list_prev,
             # next
             'day_list_next': day_list_next,
+            'name_list_next': name_list_next,
         })
     else:
         return render(request, 'reservation/new.html', {
@@ -114,8 +122,10 @@ def new(request, equipment_type):
 
             # prev
             'day_list_prev': day_list_prev,
+            'name_list_prev': name_list_prev,
             # next
             'day_list_next': day_list_next,
+            'name_list_next': name_list_next,
         })
 
 @login_required
@@ -145,33 +155,44 @@ def new_hood(request, yoil):
     #  월~일 예약된 장비 목록 보여주기
     #  이번주
     # for i in range(0,7): # 토, 일 5, 6
+    name_list = []
     for hood in Hood_list:
         reservations_day = reservations.filter( # 핫플레이트 1개의 예약 목록
             equipment_type=hood,
-            author__username=request.user.username,
+            # author__username=request.user.username,
             equipment_date=start_day + timedelta(days=yoil)
         ).order_by('equip_start_time')
         temp_list = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
+        user_list = []
         for res in reservations_day:
             temp_list.extend(myrange(res.equip_start_time, res.equip_finish_time, 0.5))
+            for _ in myrange(res.equip_start_time, res.equip_finish_time, 0.5):
+                user_list.append(res.author.username)
         day_list.append(temp_list)
+        name_list.append(user_list)
 
     # 저번주
     day_list_prev = []
+    name_list_prev = []
     # for i in range(0,7): # 토, 일 5, 6
     for hood in Hood_list:
         reservations_day_prev = reservations.filter( # 하루치 예약 목록
             equipment_type=hood,
-            author__username=request.user.username,
+            # author__username=request.user.username,
             equipment_date=start_day_prev + timedelta(days=yoil)
         ).order_by('equip_start_time')
         temp_list_prev = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
+        user_list_prev = []
         for res_prev in reservations_day_prev:
             temp_list_prev.extend(myrange(res_prev.equip_start_time, res_prev.equip_finish_time, 0.5))
+            for _ in myrange(res_prev.equip_start_time, res_prev.equip_finish_time, 0.5):
+                user_list_prev.append(res_prev.author.username)
         day_list_prev.append(temp_list_prev)
+        name_list_prev.append(user_list_prev)
 
     # 다음주
     day_list_next = []
+    name_list_next = []
     # for i in range(0, 7):  # 토, 일 5, 6
     for hood in Hood_list:
         reservations_day_next = reservations.filter(  # 하루치 예약 목록
@@ -180,9 +201,13 @@ def new_hood(request, yoil):
             equipment_date=start_day_next + timedelta(days=yoil)
         ).order_by('equip_start_time')
         temp_list_next = []  # 예약 시작 시간, 예약 끝 시간, 간격(30분)
+        user_list_next = []
         for res_next in reservations_day_next:
             temp_list_next.extend(myrange(res_next.equip_start_time, res_next.equip_finish_time, 0.5))
+            for _ in myrange(res_next.equip_start_time, res_next.equip_finish_time, 0.5):
+                user_list_next.append(res_next.author.username)
         day_list_next.append(temp_list_next)
+        name_list_next.append(user_list_next)
 
     return render(request, 'reservation/new_hood.html', {
                                                     'author_username': request.user.username,
@@ -190,11 +215,14 @@ def new_hood(request, yoil):
                                                     'weekday_mark':weekday_mark,
                                                     'day_list':day_list,
                                                     'start_day_diff':start_day_diff,
+                                                    'name_list': name_list,
 
                                                     # prev
                                                     'day_list_prev': day_list_prev,
+                                                    'name_list_prev': name_list_prev,
                                                     # next
                                                     'day_list_next': day_list_next,
+                                                    'name_list_next': name_list_next,
                                                     'yoil': yoil,
                                                     })
 

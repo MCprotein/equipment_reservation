@@ -799,6 +799,7 @@
             // 시작 날짜 세팅
             var day = new Date();
             day.setDate(day.getDate()+{{start_day_diff}}-1);
+            var name_list = {{name_list|safe}};
 
             // 예약 세팅
 
@@ -811,7 +812,7 @@
                 document.getElementById(day_name[i]).innerHTML= mm.toString() + "/"+ dd.toString() + kor_day_name[i];
 
                 for(var j=0; j<day_list[i].length; j++){
-                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML='{{author_username}}';
+                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML=name_list[i][j];
                     if( $('#equipment_type').val()=='Press')
                         document.getElementById( day_name[i]+'_'+day_list[i][j]).style.backgroundColor='rgba(255, 99, 132)';
                     else if( $('#equipment_type').val()=='Dsc')
@@ -837,6 +838,7 @@
             // 시작 날짜 세팅
             var day_prev = new Date();
             day_prev.setDate(day_prev.getDate()+{{start_day_diff}}-8);
+            var name_list_prev = {{name_list_prev|safe}};
 
             // 예약 세팅
 
@@ -849,7 +851,7 @@
                 document.getElementById(day_name_prev[i]+'_prev').innerHTML= mm_prev.toString() + "/"+ dd_prev.toString() + kor_day_name_prev[i];
 
                 for(var j=0; j<day_list_prev[i].length; j++){
-                    document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev' ).innerHTML='{{author_username}}';
+                    document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev' ).innerHTML=name_list_prev[i][j];
                     if( $('#equipment_type').val()=='Press')
                         document.getElementById( day_name_prev[i]+'_'+day_list_prev[i][j]+'_prev').style.backgroundColor='rgba(255, 99, 132)';
                     else if( $('#equipment_type').val()=='Dsc')
@@ -875,6 +877,7 @@
             // 시작 날짜 세팅
             var day_next = new Date();
             day_next.setDate(day_next.getDate()+{{start_day_diff}}+6);
+            var name_list_next = {{name_list_next|safe}};
 
 
             // 예약 세팅
@@ -888,7 +891,7 @@
                 document.getElementById(day_name_next[i]+'_next').innerHTML= mm_next.toString() + "/"+ dd_next.toString() + kor_day_name_next[i];
 
                 for(var j=0; j<day_list_next[i].length; j++){
-                    document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next' ).innerHTML='{{author_username}}';
+                    document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next' ).innerHTML=name_list_next[i][j];
                     if( $('#equipment_type').val()=='Press')
                         document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next').style.backgroundColor='rgba(255, 99, 132)';
                     else if( $('#equipment_type').val()=='Dsc')
