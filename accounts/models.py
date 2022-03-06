@@ -8,7 +8,7 @@ class Profile(models.Model):
     realname = models.TextField(max_length=20) # 이름
     department = models.TextField(max_length=20) # 부서
     email = models.EmailField(max_length=200)
-    is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=False)
 

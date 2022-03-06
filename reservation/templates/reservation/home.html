@@ -87,6 +87,8 @@
 
         var today = new Date().getDay();
         today -= 1
+        if( today == -1) {
+            today += 7;}
         // New 페이지 이동
         function goNewHood(){
             location.href="/reservation/new/hood/"+ today ;

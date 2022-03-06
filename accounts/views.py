@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+
+from .forms import RegisterForm
 from .models import Profile
 from datetime import datetime
 from reservation.models import Reservation, Blog
@@ -27,23 +29,31 @@ def signup(request):
 
             # 이메일 중복일 경우 실패
             # if len(User.objects.filter(email=mail_to)) == 0:
-            if User.objects.filter(email=mail_to).exists():
-                # new_user = User.objects.create(username=request.POST.get('username'), password=request.POST.get('password1'))
-                new_user = request.user
-                new_user.set_password(request.POST.get('password1'))
-                new_user.set_email(request.POST.get('email'))
+            if not User.objects.filter(email=mail_to).exists():
+                new_user = User.objects.create_user(username=request.POST.get('username'),
+                                                    email=mail_to,
+                                                    password=request.POST.get('password1'))
+                # new_user = request.user
+                # new_user.set_password(request.POST.get('password1'))
+                # new_user.set_email(request.POST.get('email'))
                 new_user.is_active = False
                 new_user.save()
+                # 여기까지 기능 동작함 프로필안만들어짐
                 realname = request.POST.get('realname') # 이름
                 department = request.POST.get('department') # 소속
                 email = mail_to
-                profile = Profile(user=new_user, realname=realname, department=department, email=email)
+                # profile = Profile(user=new_user, realname=realname, department=department, email=email)
+                profile = Profile.objects.create(user=new_user)
+                profile.realname= request.POST.get('realname') # 이름
+                profile.department = request.POST.get('department') # 소속
+                profile.email = mail_to
                 profile.save() # 프로필 저장
 
                 current_site = get_current_site(request)
                 message = render_to_string('accounts/activation_email.html', {
                     'user': new_user,
-                    'domain': current_site.domain,
+                    # 'domain': current_site.domain,
+                    'domain': request.get_host(),
                     'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
                     'token': account_activation_token.make_token(new_user),
                 })
@@ -130,7 +140,7 @@ def login(request):
         user = auth.authenticate(request, username=username, password=password)
 
         if user is not None:
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home')
         else:
             return render(request, 'accounts/login.html', {'msg':'입력 정보가 올바르지 않습니다.'})
@@ -152,7 +162,10 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        auth.login(request, user)
+        profile = Profile.objects.filter(user=user).first()
+        profile.is_active = True
+        profile.save()
+        auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect("home")
     else:
         notice_list = Blog.objects.filter(category="공지사항").order_by('-created')
@@ -177,3 +190,39 @@ class MyPasswordResetConfirmView(PasswordResetConfirmView):
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+#     user_form = RegisterForm(request.POST)
+    #     if user_form.is_valid():
+    #         if User.objects.filter(email=user_form.cleaned_data['email']):
+    #             msg = user_form.cleaned_data['email'] + "의 이메일로 인증한 계정이 존재합니다. 비밀번호 재설정을 이용해주세요"
+    #             return render(request, 'accounts/login.html', {'msg': msg})
+    #         else:
+    #             new_user = user_form.save(commit=False)
+    #             new_user.set_password(user_form.cleaned_data['password'])
+    #             new_user.set_email(user_form.cleaned_data['email']+'@gmail.com')
+    #             new_user.save()
+    #
+    #             # 이메일 인증 관련
+    #             mail_to = user_form.cleaned_data['email']+'@gmail.com'
+    #             current_site = get_current_site(request)
+    #             message = render_to_string('accounts/activation_email.html', {
+    #                 'user': new_user,
+    #                 'domain': current_site.domain,
+    #                 'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
+    #                 'token': account_activation_token.make_token(new_user),
+    #             })
+    #             mail_title = "티엠디랩 실험실 장비 예약 시스템 계정 활성화 확인"
+    #             email = EmailMessage(mail_title, message, to=[mail_to])
+    #             email.send()
+    #
+    #
+    #             notice_list = Blog.objects.filter(category="공지사항").order_by('created')  # 공지사항
+    #             notices = notice_list[0:3]  # 최근 3개 글만 보여줌
+    #             lost_list = Blog.objects.filter(category="분실물").order_by('created')  # 분실물
+    #             losts = lost_list[0:3]  # 최근 3개 글만 보여줌
+    #             msg = mail_to + "주소로 인증 메일을 발송하였습니다. 입력하신 메일을 확인하여 인증을 완료해주세요."
+    #             return render(request, 'reservation/home.html',
+    #                           {'msg': msg, 'notices': notices, 'losts': losts, 'proportion': proportion})
+    # else:
+    #     user_form = RegisterForm()
+    # return render(request, 'accounts/signup.html', {'form':user_form})
