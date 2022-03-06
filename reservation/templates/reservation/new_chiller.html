@@ -725,6 +725,8 @@
 
         var today = new Date().getDay();
         today -= 1
+        if( today == -1) {
+            today += 7;}
         // New 페이지 이동
         function goNewHood(){
             location.href="/reservation/new/hood/"+ today ;
@@ -785,6 +787,7 @@
             // 시작 날짜 세팅
             var day = new Date();
             day.setDate(day.getDate()+{{start_day_diff}}-1);
+            var name_list = {{name_list|safe}};
 
             // 예약 세팅
 
@@ -797,7 +800,7 @@
                 document.getElementById(day_name[i]).innerHTML= mm.toString() + "/"+ dd.toString() + kor_day_name[i];
 
                 for(var j=0; j<day_list[i].length; j++){
-                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML='{{author_username}}';
+                    document.getElementById( day_name[i]+'_'+day_list[i][j] ).innerHTML=name_list[i][j];
                     if( $('#equipment_type').val()=='Chiller_D')
                         document.getElementById( day_name[i]+'_'+day_list[i][j] ).style.backgroundColor='rgba(87, 144, 246)';
                     else if( $('#equipment_type').val()=='Chiller_J')
@@ -840,6 +843,7 @@
 
     </script>
 
+<!-- 다음주 -->
 <script type="text/javascript">
         $(function() {
             var day_list_next = {{day_list_next}};
@@ -864,7 +868,7 @@
                 for(var j=0; j<day_list_next[i].length; j++){
                     document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next' ).innerHTML='{{author_username}}';
                     if( $('#equipment_type').val()=='Chiller_D')
-                        document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next' ).style.backgroundColor='rgba(87, 144, 246)';
+                        document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next').style.backgroundColor='rgba(87, 191, 141)';
                     else if( $('#equipment_type').val()=='Chiller_J')
                         document.getElementById( day_name_next[i]+'_'+day_list_next[i][j]+'_next').style.backgroundColor='rgba(87, 191, 141)';
                 }

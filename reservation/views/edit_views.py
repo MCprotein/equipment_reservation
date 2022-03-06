@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from ..models import Reservation
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 
 def myrange(start, end, step):
     r = start
@@ -31,19 +33,29 @@ def new(request, equipment_type):
     day_list = []
 
     #  월~일 예약된 장비 목록 보여주기
+
     #  이번주
+    name_list = []
     for i in range(0,7): # 토, 일 5, 6
         day = start_day + timedelta(days=i)
-        reservations_day = reservations.filter( # 하루치 예약 목록
+        reservations_day = reservations.filter( # 하루치 예약 목록, 사람 구별 없음
             equipment_type=equipment_type,
-            author__username=request.user.username,
+            # author__username=request.user.username,
             equipment_date=day
         ).order_by('equip_start_time')
-        temp_list = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
+        temp_list = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분) # 하루치
+        user_list = []
         for res in reservations_day:
             temp_list.extend(myrange(res.equip_start_time, res.equip_finish_time, 0.5))
-        day_list.append(temp_list)
-
+            for _ in myrange(res.equip_start_time,res.equip_finish_time, 0.5):
+                user_list.append(res.author.username)
+        day_list.append(temp_list) # 일주일치
+        name_list.append(user_list)
+        print(user_list)
+        print(reservations_day)
+        print(temp_list)
+    print(name_list)
+    print(day_list)
     # 저번주
     day_list_prev = []
     for i in range(0,7): # 토, 일 5, 6
@@ -51,7 +63,7 @@ def new(request, equipment_type):
         day_prev = start_day_prev + timedelta(days=i)
         reservations_day_prev = reservations.filter( # 하루치 예약 목록
             equipment_type=equipment_type,
-            author__username=request.user.username,
+            # author__username=request.user.username,
             equipment_date=day_prev
         ).order_by('equip_start_time')
         temp_list_prev = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
@@ -66,7 +78,7 @@ def new(request, equipment_type):
         day_next = start_day_next + timedelta(days=i)
         reservations_day_next = reservations.filter(  # 하루치 예약 목록
             equipment_type=equipment_type,
-            author__username=request.user.username,
+            # author__username=request.user.username,
             equipment_date=day_next
         ).order_by('equip_start_time')
         temp_list_next = []  # 예약 시작 시간, 예약 끝 시간, 간격(30분)
@@ -83,6 +95,7 @@ def new(request, equipment_type):
             'weekday_mark': weekday_mark,
             'day_list': day_list,
             'start_day_diff': start_day_diff,
+            'name_list': name_list,
 
             # prev
             'day_list_prev': day_list_prev,
@@ -91,18 +104,19 @@ def new(request, equipment_type):
         })
     else:
         return render(request, 'reservation/new.html', {
-                                                    'author_username': request.user.username,
-                                                    'equipment_type': equipment_type,
-                                                    'date_diff':date_diff,
-                                                    'weekday_mark':weekday_mark,
-                                                    'day_list':day_list,
-                                                    'start_day_diff':start_day_diff,
+            'author_username': request.user.username,
+            'equipment_type': equipment_type,
+            'date_diff':date_diff,
+            'weekday_mark':weekday_mark,
+            'day_list':day_list,
+            'start_day_diff':start_day_diff,
+            'name_list': name_list,
 
-                                                    # prev
-                                                    'day_list_prev': day_list_prev,
-                                                    # next
-                                                    'day_list_next': day_list_next,
-                                                    })
+            # prev
+            'day_list_prev': day_list_prev,
+            # next
+            'day_list_next': day_list_next,
+        })
 
 @login_required
 def new_hood(request, yoil):
