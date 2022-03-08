@@ -4,7 +4,9 @@
 {% block script %}
 
     <link rel=icon href="{% static 'reservation/tmdCiSm.png' %}" sizes="32x16" type="image/png">
-    <link rel="stylesheet" href="{% static 'reservation/main.css'%}">
+<link rel="stylesheet" href="{% static 'reservation/main.css'%}">
+<!--<link rel="stylesheet" href="{% static 'reservation/bootstrap.min.css'%}">-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
 
 
 {% endblock %}
@@ -28,7 +30,7 @@
                 {% endif %}
             </section>
         <section class="post_container">
-        <ul class="pagination">
+        <ul class="pagination justify-content-center">
                 <li class="page-item">
                     <a class="page-link" href="?page=1">처음</a>
                 </li>
