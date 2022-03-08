@@ -50,6 +50,11 @@ def new(request, equipment_type):
             temp_list.extend(myrange(res.equip_start_time, res.equip_finish_time, 0.5))
             for _ in myrange(res.equip_start_time,res.equip_finish_time, 0.5):
                 user_list.append(res.author.username)
+                from accounts.models import Profile
+                profile = Profile.objects.filter(user=res.author)
+                # print(res.author)
+                print(profile)
+                # print(profile.realname)
         day_list.append(temp_list) # 일주일치
         name_list.append(user_list)
     # 저번주

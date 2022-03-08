@@ -110,7 +110,7 @@ header>.logo{
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(218,33,39);
+    background: rgba(69,95,222);
     color: rgb(255,255,255);
 }
 header>.logo>img{
@@ -187,10 +187,21 @@ main>#chart{
     align-items: center;
     justify-content: space-around;
     background: rgb(255,255,255);
-    border-radius: 5px;
+    border-radius: 4px;
 }
 main>#chart>.chart_div{
-    width: 80px;
+    width: 100px;
+}
+main>#chart2{
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: rgb(255,255,255);
+    border-radius: 4px;
+}
+main>#chart2>.chart_div{
+    width: 100px;
 }
 main>#mypage #btn_mypage{
     width: 100%;
@@ -290,7 +301,7 @@ main>#reserve>.buttons button:nth-child(3){
     background: rgba(255, 99, 132);
 }
 main>#reserve>.buttons button:nth-child(4){
-    background: rgba(110, 227, 86);
+    background: rgba(106, 80, 71);
 }
 main>#reserve>.buttons button:nth-child(5){
     background: rgba(119, 86, 227);
@@ -734,7 +745,7 @@ main>.post_wrap>.post li:hover{
     height: 35px;
     border: none;
     border-radius: 3px;
-    background: rgba(218,33,39);
+    background: rgba(69,95,222);
     font-size: 1rem;
     color: white;
 }
