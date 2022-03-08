@@ -25,7 +25,6 @@ def new(request, equipment_type):
     start_day_next = today - timedelta(days=today_day) + timedelta(weeks=1) # 다음주 시작 월요일
     start_day_diff = 0 - today_day  # 0 - 오늘요일 차이 # 다름
 
-    # date_diff = 4-today_day # 마지막 날짜
     date_diff = 13-today_day # 마지막 날짜, 그다음주 금요일까지
 
     # 현재 예약 상황 넘겨 주기
@@ -57,6 +56,7 @@ def new(request, equipment_type):
                 # print(profile.realname)
         day_list.append(temp_list) # 일주일치
         name_list.append(user_list)
+
     # 저번주
     day_list_prev = []
     name_list_prev = []
@@ -97,7 +97,6 @@ def new(request, equipment_type):
         day_list_next.append(temp_list_next)
         name_list_next.append(user_list_next)
 
-    # if equipment_type == "Chiller_D" or equipment_type == "Chiller_J":
     if 'Chiller' in equipment_type:
         return render(request, 'reservation/new_chiller.html', {
             'author_username': request.user.username,
@@ -150,21 +149,18 @@ def new_hood(request, yoil):
     start_day_next = today - timedelta(days=today_day) + timedelta(weeks=1) # 다음주 시작 월요일
     start_day_diff = 0 - today_day  # 0 - 오늘요일 차이 # 다름
 
-    # date_diff = 4-today_day # 마지막 날짜
     date_diff = 13-today_day # 마지막 날짜, 그다음주 금요일까지
 
     # 현재 예약 상황 넘겨 주기
     reservations = Reservation.objects.all()
-    day_list = []
+
 
     #  월~일 예약된 장비 목록 보여주기
-    #  이번주
-    # for i in range(0,7): # 토, 일 5, 6
+    day_list = []
     name_list = []
     for hood in Hood_list:
         reservations_day = reservations.filter( # 핫플레이트 1개의 예약 목록
             equipment_type=hood,
-            # author__username=request.user.username,
             equipment_date=start_day + timedelta(days=yoil)
         ).order_by('equip_start_time')
         temp_list = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
@@ -179,11 +175,9 @@ def new_hood(request, yoil):
     # 저번주
     day_list_prev = []
     name_list_prev = []
-    # for i in range(0,7): # 토, 일 5, 6
     for hood in Hood_list:
         reservations_day_prev = reservations.filter( # 하루치 예약 목록
             equipment_type=hood,
-            # author__username=request.user.username,
             equipment_date=start_day_prev + timedelta(days=yoil)
         ).order_by('equip_start_time')
         temp_list_prev = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
@@ -198,11 +192,9 @@ def new_hood(request, yoil):
     # 다음주
     day_list_next = []
     name_list_next = []
-    # for i in range(0, 7):  # 토, 일 5, 6
     for hood in Hood_list:
         reservations_day_next = reservations.filter(  # 하루치 예약 목록
             equipment_type=hood,
-            author__username=request.user.username,
             equipment_date=start_day_next + timedelta(days=yoil)
         ).order_by('equip_start_time')
         temp_list_next = []  # 예약 시작 시간, 예약 끝 시간, 간격(30분)
@@ -230,22 +222,6 @@ def new_hood(request, yoil):
                                                     'name_list_next': name_list_next,
                                                     'yoil': yoil,
                                                     })
-
-def edit(request, reservation_id):
-    reservation = get_object_or_404(Reservation, pk=reservation_id)
-    min_date = datetime.now().strftime("%Y-%m-%d") # 오늘부터
-    max_date = (datetime.now() + timedelta(days=14)).strftime("%Y-%m-%d") # 14일 후까지 가능
-    return render(request, 'reservation/edit.html', {'reservation':reservation, 'min_date':min_date, 'max_date':max_date})
-
-def update(request, reservation_id):
-    reservation = get_object_or_404(Reservation, pk=reservation_id)
-    reservation.equipment_type = request.GET.get('equipment_type')
-    reservation.equipment_date = request.GET.get('equipment_date')
-    reservation.equip_start_time = request.GET.get('equip_start_time')
-    reservation.equip_finish_time = request.GET.get('equip_finish_time')
-    reservation.save()
-
-    return redirect('/reservation/'+str(reservation.id)) # 새로운 예약 url 주소로 이동
 
 def delete(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)

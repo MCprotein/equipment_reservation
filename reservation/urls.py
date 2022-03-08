@@ -16,14 +16,11 @@ urlpatterns = [
     path('new/<str:equipment_type>/', edit_views.new, name='new'),
     path('new/hood/<int:yoil>', edit_views.new_hood, name='new_hood'),
     path('new/chiller/<str:equipment_type>', edit_views.new, name='new_chiller'),
-    path('edit/<int:reservation_id>/', edit_views.edit, name='edit'),
-    path('update/<int:reservation_id>/', edit_views.update, name='update'),
     path('delete/<int:reservation_id>/', edit_views.delete, name='delete'),
 
     # my_views.py
     path('my/', my_views.myreservation, name='myreservation'),
     path('create/', my_views.create, name='create'),
-    path('total/<str:equipment_type>', my_views.total, name='total'),
 
     # ajax_views.py
     path('check/', ajax_views.check, name='check'),

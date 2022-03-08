@@ -4,15 +4,28 @@ from ..models import Blog
 from ..forms import BlogCreateForm
 from django.contrib import messages
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 def blog_detail(request, blog_id):
     blogs = get_object_or_404(Blog, pk=blog_id) # 특정 객체 가져오기
     return render(request, 'reservation/blog_detail.html', {'blogs':blogs})
 
 def blog_index(request, category_name):
+    # 입력 파라미터
+    page = request.GET.get('page', '1') # 페이지
+    # 조회
     blogs = Blog.objects.filter(category=category_name).order_by('-created')
     category_name = category_name
-    return render(request, 'reservation/blog_index.html', {'category_name':category_name, 'blogs':blogs})
+
+    # 페이징처리
+    paginator = Paginator(blogs, 10) # 페이지당 10개씩 보여주기
+    max_index = len(paginator.page_range)
+    min_index = paginator.page_range.start
+    # 페이징 객체 생성
+    page_obj = paginator.get_page(page)
+
+    context = {'blog_list':page_obj, 'category_name':category_name, 'max_index':max_index}
+    return render(request, 'reservation/blog_index.html', context)
 
 @login_required(login_url='accounts:login')
 def blog_create(request, category_name):

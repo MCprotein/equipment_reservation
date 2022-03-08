@@ -12,9 +12,9 @@
 {% block content %}
 <div id="wrapper">
     <div>
-    <main style="height: 125vh;">
+    <main style="height: 135vh;">
         <section id="reserve">
-            <!-- <h3>예약 하기</h3> -->
+            <!-- 예약 하기 -->
             <div class="buttons">
                 <button id="Hood" onclick="goNewHood()">후드</button>
                 <button id="Chiller" onclick="goNewChiller_D()">칠러</button>
@@ -687,19 +687,7 @@
     </main>
     </div>
 </div>
-    <footer>
-        <div style="width:30; height:30px; float:left; margin:15px;">
-            <img src="{% static 'reservation/tmdCiL.png' %}" alt="footer_logo" />
-        </div>
-        <span class="contact" style="font-size:x-large; color:inherit ;">
-                <a href="https://open.kakao.com/o/srtwxB0d" target="_blank" style="color:white;"><i class="far fa-comment"></i></a>
-                <a href="https://www.tmdlab.com/#/w/ko/home" target="_blank" style="color:white;">티엠디랩</a>
 
-        </span>
-        <p>티엠디랩 Tel: 02-6216-0080</p>
-        <p>만든사람 <span style="font-size: medium;"><a target="_blank" style="color:white; text-decoration: none;" href="https://github.com/MCprotein">신윤수</a></span></p>
-        <p class="copyright">Copyright(c) SYS. All rights reserved.</p>
-    </footer>
     <script src="{% static 'reservation/main.js' %}"></script>
     <script>
         $(function() {
