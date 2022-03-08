@@ -27,9 +27,13 @@
                 </div>
 
                 <a href="{% url 'reservation:blog_index' blogs.category %}"><button class="post_btn">목록</button></a>
+
+                {% if user == blogs.author %}
                 <a href="{% url 'reservation:blog_modify' blogs.id %}"><button class="post_btn">수정</button></a>
                 <a href="{% url 'reservation:blog_delete' blogs.category blogs.id %}"
                    data-uri="{% url 'reservation:blog_delete' blogs.category blogs.id %}"><button class="delete post_btn">삭제</button></a>
+                {% endif %}
+
                 {% if blogs.category == "공지사항" %}
                 <a href="{% url 'reservation:blog_create' "공지사항" %}"><button class="post_btn">글쓰기</button></a>
                 {% elif blogs.category == "분실물" %}
