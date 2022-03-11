@@ -3,7 +3,7 @@ from ..models import Reservation
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from accounts.models import Profile
 
 def myrange(start, end, step):
     r = start
@@ -40,20 +40,16 @@ def new(request, equipment_type):
         day = start_day + timedelta(days=i)
         reservations_day = reservations.filter( # 하루치 예약 목록, 사람 구별 없음
             equipment_type=equipment_type,
-            # author__username=request.user.username,
             equipment_date=day
         ).order_by('equip_start_time')
         temp_list = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분) # 하루치
         user_list = []
         for res in reservations_day:
             temp_list.extend(myrange(res.equip_start_time, res.equip_finish_time, 0.5))
+            pro = User.objects.get(username=res.author.username)
+            name = Profile.objects.get(user_id=pro.id)
             for _ in myrange(res.equip_start_time,res.equip_finish_time, 0.5):
-                user_list.append(res.author.username)
-                from accounts.models import Profile
-                profile = Profile.objects.filter(user=res.author)
-                # print(res.author)
-                print(profile)
-                # print(profile.realname)
+                user_list.append(name.realname)
         day_list.append(temp_list) # 일주일치
         name_list.append(user_list)
 
@@ -65,15 +61,17 @@ def new(request, equipment_type):
         day_prev = start_day_prev + timedelta(days=i)
         reservations_day_prev = reservations.filter( # 하루치 예약 목록
             equipment_type=equipment_type,
-            # author__username=request.user.username,
             equipment_date=day_prev
         ).order_by('equip_start_time')
         temp_list_prev = [] # 예약 시작 시간, 예약 끝 시간, 간격(30분)
         user_list_prev = []
         for res_prev in reservations_day_prev:
             temp_list_prev.extend(myrange(res_prev.equip_start_time, res_prev.equip_finish_time, 0.5))
+            pro_prev = User.objects.get(username=res_prev.author.username)
+            name_prev = Profile.objects.get(user_id=pro_prev.id)
             for _ in myrange(res_prev.equip_start_time,res_prev.equip_finish_time, 0.5):
-                user_list_prev.append(res_prev.author.username)
+                # user_list_prev.append(res_prev.author.username)
+                user_list_prev.append(name_prev.realname)
         day_list_prev.append(temp_list_prev)
         name_list_prev.append(user_list_prev)
 
@@ -85,15 +83,17 @@ def new(request, equipment_type):
         day_next = start_day_next + timedelta(days=i)
         reservations_day_next = reservations.filter(  # 하루치 예약 목록
             equipment_type=equipment_type,
-            # author__username=request.user.username,
             equipment_date=day_next
         ).order_by('equip_start_time')
         user_list_next = []
         temp_list_next = []  # 예약 시작 시간, 예약 끝 시간, 간격(30분)
         for res_next in reservations_day_next:
             temp_list_next.extend(myrange(res_next.equip_start_time, res_next.equip_finish_time, 0.5))
+            pro_next = User.objects.get(username=res_next.author.username)
+            name_next = Profile.objects.get(user_id=pro_next.id)
             for _ in myrange(res_next.equip_start_time,res_next.equip_finish_time, 0.5):
-                user_list_next.append(res_next.author.username)
+                # user_list_next.append(res_next.author.username)
+                user_list_next.append(name_next.realname)
         day_list_next.append(temp_list_next)
         name_list_next.append(user_list_next)
 
@@ -167,8 +167,11 @@ def new_hood(request, yoil):
         user_list = []
         for res in reservations_day:
             temp_list.extend(myrange(res.equip_start_time, res.equip_finish_time, 0.5))
+            pro = User.objects.get(username=res.author.username)
+            name = Profile.objects.get(user_id=pro.id)
             for _ in myrange(res.equip_start_time, res.equip_finish_time, 0.5):
-                user_list.append(res.author.username)
+                # user_list.append(res.author.username)
+                user_list.append(name.realname)
         day_list.append(temp_list)
         name_list.append(user_list)
 
@@ -184,8 +187,11 @@ def new_hood(request, yoil):
         user_list_prev = []
         for res_prev in reservations_day_prev:
             temp_list_prev.extend(myrange(res_prev.equip_start_time, res_prev.equip_finish_time, 0.5))
+            pro_prev = User.objects.get(username=res_prev.author.username)
+            name_prev = Profile.objects.get(user_id=pro_prev.id)
             for _ in myrange(res_prev.equip_start_time, res_prev.equip_finish_time, 0.5):
-                user_list_prev.append(res_prev.author.username)
+                # user_list_prev.append(res_prev.author.username)
+                user_list_prev.append(name_prev.realname)
         day_list_prev.append(temp_list_prev)
         name_list_prev.append(user_list_prev)
 
@@ -201,8 +207,11 @@ def new_hood(request, yoil):
         user_list_next = []
         for res_next in reservations_day_next:
             temp_list_next.extend(myrange(res_next.equip_start_time, res_next.equip_finish_time, 0.5))
+            pro_next = User.objects.get(username=res_next.author.username)
+            name_next = Profile.objects.get(user_id=pro_next.id)
             for _ in myrange(res_next.equip_start_time, res_next.equip_finish_time, 0.5):
-                user_list_next.append(res_next.author.username)
+                # user_list_next.append(res_next.author.username)
+                user_list_next.append(name_next.realname)
         day_list_next.append(temp_list_next)
         name_list_next.append(user_list_next)
 
